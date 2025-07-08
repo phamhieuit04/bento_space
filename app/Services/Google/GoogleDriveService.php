@@ -2,6 +2,7 @@
 
 namespace App\Services\Google;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
@@ -9,34 +10,44 @@ use Illuminate\Support\Facades\Storage;
 class GoogleDriveService
 {
     const SERVICE_ENDPOINT = 'https://www.googleapis.com/drive/v3';
+    private $accessToken;
+    private $fields;
 
-    public function get(string $accessToken, array $params = null)
+    public function __construct()
     {
-        return Http::withToken($accessToken)
-            ->get(self::SERVICE_ENDPOINT . '/files', $params)
-            ->collect();
+        $this->accessToken = Auth::user()->google_token;
+        $this->fields = 'id,name,mimeType,size,thumbnailLink';
     }
 
-    public function find($id, string $accessToken)
+    public function all()
     {
-        return self::get($accessToken)
-            ->map(fn($file) => collect($file)
-                ->where('id', $id)->values())['files'][0];
-    }
-    public function findByName(string $name, string $accessToken)
-    {
-        return self::get($accessToken)
-            ->map(fn($file) => collect($file)
-                ->where('name', $name)->values())['files'][0];
+        return collect(Http::withToken($this->accessToken)->get(
+            self::SERVICE_ENDPOINT . '/files',
+            ['fields' => "files({$this->fields})"]
+        )->json()['files']);
     }
 
-    public function download(int $id, string $filename, string $accessToken)
+    public function find(string $id)
     {
-        $downloadResponse = Http::withToken($accessToken)
-            ->get(self::SERVICE_ENDPOINT . "/files/{$id}", [
-                'alt' => 'media'
-            ]);
-        Storage::put($filename, $downloadResponse->body());
+        return Http::withToken($this->accessToken)->get(
+            self::SERVICE_ENDPOINT . "/files/{$id}",
+            ['fields' => $this->fields]
+        )->collect();
+    }
+
+    public function findByName(string $name)
+    {
+        return collect(Http::withToken($this->accessToken)->get(
+            self::SERVICE_ENDPOINT . '/files',
+            ['fields' => "files({$this->fields})", 'q' => "name = '{$name}'"]
+        )->json()['files'][0]);
+    }
+
+    public function download(string $id)
+    {
+        $response = Http::withToken($this->accessToken)
+            ->get(self::SERVICE_ENDPOINT . "/files/{$id}", ['alt' => 'media']);
+        Storage::put(self::find($id)['name'], $response->body());
         return true;
     }
 }
