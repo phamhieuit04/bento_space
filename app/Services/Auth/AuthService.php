@@ -17,9 +17,8 @@ class AuthService
             'name' => $googleUser['name'],
             'email' => $googleUser['email']
         ]);
-        GoogleToken::updateOrCreate(['user_id' => $user->id], [
-            'token' => $accessToken
-        ]);
+        $user->google_token = $accessToken;
+        $user->touch();
         Auth::login($user);
         return true;
     }

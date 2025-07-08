@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Facades\Google\Google;
-use App\Facades\Google\GoogleDrive;
 use App\Services\Auth\AuthService;
 use Illuminate\Http\Request;
 
@@ -22,7 +21,7 @@ class AuthController extends Controller
     {
         $code = $request->input('code');
         if ($this->authService->login($code)) {
-            return redirect('index');
+            return redirect('/dashboard');
         }
         return redirect('/');
     }
