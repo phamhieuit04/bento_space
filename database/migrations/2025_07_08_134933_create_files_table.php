@@ -10,10 +10,12 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('google_tokens', function (Blueprint $table) {
+        Schema::create('files', function (Blueprint $table) {
             $table->id();
-            $table->text('token');
-            $table->integer('user_id');
+            $table->text('drive_id');
+            $table->string('name');
+            $table->bigInteger('size');
+            $table->text('thumbnail_url');
             $table->timestamps();
         });
     }
@@ -23,6 +25,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('google_tokens');
+        Schema::dropIfExists('files');
     }
 };

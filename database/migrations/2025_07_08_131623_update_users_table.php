@@ -14,6 +14,7 @@ return new class extends Migration {
             if (Schema::hasColumn('users', 'password')) {
                 $table->dropColumn('password');
             };
+            $table->text('google_token')->nullable();
         });
     }
 
