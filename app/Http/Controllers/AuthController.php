@@ -20,7 +20,7 @@ class AuthController extends Controller
     public function googleCallback(Request $request)
     {
         $code = $request->input('code');
-        if ($this->authService->login($code)) {
+        if ($this->authService->signin($code)) {
             return redirect('/dashboard');
         }
         return redirect('/');
