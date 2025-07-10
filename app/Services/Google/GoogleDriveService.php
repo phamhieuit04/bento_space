@@ -16,16 +16,18 @@ class GoogleDriveService
     public function __construct()
     {
         $this->accessToken = Auth::user()->google_token;
-        $this->fields = 'id,name,mimeType,size,thumbnailLink';
+        $this->fields = 'id,name,mimeType,size,thumbnailLink,createdTime,modifiedTime,parents';
     }
 
     public function all()
     {
         return collect(Http::withToken($this->accessToken)->get(
             self::SERVICE_ENDPOINT . '/files',
-            ['fields' => "files({$this->fields})"]
+            ['pageSize' => 1000, 'fields' => "files({$this->fields})",]
         )->json()['files']);
     }
+
+    // TODO: add getFolders and getFiles functions
 
     public function find(string $id)
     {

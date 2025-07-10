@@ -17,7 +17,8 @@ class GoogleService
             '?client_id=' . env('GOOGLE_CLIENT_ID') .
             '&redirect_uri=' . env('GOOGLE_REDIRECT_URL') .
             '&response_type=code' .
-            '&scope=email%20profile%20openid%20' . self::GOOGLE_SCOPE_DRIVE;
+            '&scope=email%20profile%20openid%20' . self::GOOGLE_SCOPE_DRIVE .
+            "&prompt=select_account";
     }
 
     public function getAccessToken(string $code)
