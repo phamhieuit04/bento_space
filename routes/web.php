@@ -6,9 +6,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('login');
 
-Route::get('/google/auth', [AuthController::class, 'googleAuth'])->name('login');
+Route::get('/google/auth', [AuthController::class, 'googleAuth']);
 Route::get('/google/callback', [AuthController::class, 'googleCallback']);
 
-Route::get('/dashboard', [DashboardController::class, 'index']);
+Route::middleware('auth')->group(function () {
+    Route::group(['prefix' => 'dashboard'], function () {
+        Route::get('/', [DashboardController::class, 'index']);
+        Route::get('/sync', [DashboardController::class, 'sync']);
+    });
+});
