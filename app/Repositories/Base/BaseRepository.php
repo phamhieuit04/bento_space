@@ -20,6 +20,16 @@ class BaseRepository implements BaseRepositoryInterface
         return $this->model->find($id);
     }
 
+    public function findBy(string $column, $value)
+    {
+        return $this->model->where($column, $value)->first();
+    }
+
+    public function findWhere(array $attributes)
+    {
+        return $this->model->where($attributes)->first();
+    }
+
     public function create(array $attribute)
     {
         return $this->model->create($attribute);
@@ -29,5 +39,11 @@ class BaseRepository implements BaseRepositoryInterface
     {
         $update = $this->model->where('id', $id)->update($attribute);
         return $update ? $this->model->find($id) : null;
+    }
+
+    public function firstOrCreate(array $attributes, array $values)
+    {
+        $model = $this->findWhere($attributes);
+        return blank($model) ? $this->create($values) : $model;
     }
 }

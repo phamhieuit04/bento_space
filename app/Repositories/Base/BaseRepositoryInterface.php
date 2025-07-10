@@ -8,7 +8,13 @@ interface BaseRepositoryInterface
 
     public function find($id);
 
-    public function create(array $attribute);
+    public function findBy(string $column, $value);
 
-    public function update(array $attribute, $id);
+    public function findWhere(array $attributes);
+
+    public function create(array $attributes);
+
+    public function update(array $attributes, $id);
+
+    public function firstOrCreate(array $attributes, array $values);
 }
