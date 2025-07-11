@@ -15,6 +15,7 @@ return new class extends Migration {
                 $table->dropColumn('password');
             };
             $table->text('google_token')->nullable();
+            $table->text('root_id')->nullable();
             $table->dropTimestamps();
             $table->timestamps();
         });

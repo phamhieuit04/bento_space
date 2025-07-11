@@ -24,7 +24,8 @@ class File extends Model
     {
         return [
             'created_at' => 'datetime',
-            'updated_at' => 'datetime'
+            'updated_at' => 'datetime',
+            'parents_id' => 'collection'
         ];
     }
 }

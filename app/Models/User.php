@@ -21,7 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'google_token',
-        'email_verified_at'
+        'email_verified_at',
+        'root_id'
     ];
 
     /**
@@ -41,7 +42,7 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime',
+            'email_verified_at' => 'datetime'
         ];
     }
 }
