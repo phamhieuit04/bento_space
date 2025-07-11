@@ -10,46 +10,55 @@ use Illuminate\Support\Facades\Storage;
 class GoogleDriveService
 {
     const SERVICE_ENDPOINT = 'https://www.googleapis.com/drive/v3';
-    private $accessToken;
+    private $token;
     private $fields;
 
     public function __construct()
     {
-        $this->accessToken = Auth::user()->google_token;
+        $this->token = Auth::user()->google_token;
         $this->fields = 'id,name,mimeType,size,thumbnailLink,createdTime,modifiedTime,parents';
     }
 
     public function all()
     {
-        return collect(Http::withToken($this->accessToken)->get(
+        $response = Http::withToken($this->token)->get(
             self::SERVICE_ENDPOINT . '/files',
             ['pageSize' => 1000, 'fields' => "files({$this->fields})",]
-        )->json()['files']);
+        )->json();
+        return collect($response['files']);
     }
-
-    // TODO: add getFolders and getFiles functions
 
     public function find(string $id)
     {
-        return Http::withToken($this->accessToken)->get(
+        $response = Http::withToken($this->token)->get(
             self::SERVICE_ENDPOINT . "/files/{$id}",
             ['fields' => $this->fields]
         )->collect();
+        return $response;
     }
 
     public function findByName(string $name)
     {
-        return collect(Http::withToken($this->accessToken)->get(
+        $response = Http::withToken($this->token)->get(
             self::SERVICE_ENDPOINT . '/files',
             ['fields' => "files({$this->fields})", 'q' => "name = '{$name}'"]
-        )->json()['files'][0]);
+        )->json();
+        return collect($response['files'][0]);
     }
 
     public function download(string $id)
     {
-        $response = Http::withToken($this->accessToken)
+        $response = Http::withToken($this->token)
             ->get(self::SERVICE_ENDPOINT . "/files/{$id}", ['alt' => 'media']);
         Storage::put(self::find($id)['name'], $response->body());
         return true;
+    }
+
+    public function getRootId()
+    {
+        $response = Http::withToken($this->token)
+            ->get(self::SERVICE_ENDPOINT . '/files/root', ['fields' => 'id'])
+            ->json();
+        return $response['id'];
     }
 }
