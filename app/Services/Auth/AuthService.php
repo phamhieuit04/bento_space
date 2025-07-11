@@ -3,6 +3,7 @@
 namespace App\Services\Auth;
 
 use App\Facades\Google\Google;
+use App\Facades\Google\GoogleDrive;
 use App\Models\GoogleToken;
 use App\Models\User;
 use App\Repositories\User\UserRepositoryInterface;
@@ -25,6 +26,8 @@ class AuthService
             'google_token' => $accessToken
         ]);
         Auth::login($user);
+        $user->root_id = GoogleDrive::getRootId();
+        $user->touch();
         return true;
     }
 }
