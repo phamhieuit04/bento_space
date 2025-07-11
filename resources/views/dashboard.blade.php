@@ -10,8 +10,8 @@
 </head>
 
 <body>
-    <div class="mx-auto container flex flex-col items-end gap-5 m-5">
-        <button>
+    <div class="mx-auto container flex flex-col gap-5 m-5 items-start">
+        <button class="mb-12">
             <a href="{{ url('/dashboard/sync') }}"
                 class="bg-green-500 py-2.5 px-10 text-2xl font-bold text-white rounded-xl cursor-pointer hover:opacity-75 transition-all duration-200">Sync</a>
         </button>

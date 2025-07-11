@@ -18,14 +18,17 @@ class DashboardService
             'folders' => collect([]),
             'files' => collect([])
         ]);
+        $rootId = Auth::user()->root_id;
         $items = $this->fileRepo->all();
-        if (!blank($items)) {
-            $items->each(function ($item) use ($data) {
-                $item->mime_type == 'application/vnd.google-apps.folder'
-                    ? $data['folders']->push($item)
-                    : $data['files']->push($item);
-            });
-        }
+        $items->each(function ($item) use ($data, $rootId) {
+            if (!blank($item->parents_id)) {
+                if ($item->parents_id->contains($rootId)) {
+                    $item->mime_type == 'application/vnd.google-apps.folder' ?
+                        $data['folders']->push($item) :
+                        $data['files']->push($item);
+                }
+            }
+        });
         return $data;
     }
 
@@ -37,7 +40,7 @@ class DashboardService
                 $this->fileRepo->create([
                     'drive_id' => $file['id'],
                     'user_id' => Auth::user()->id,
-                    'parents_id' => isset($file['parents']) ? json_encode($file['parents']) : null,
+                    'parents_id' => isset($file['parents']) ? $file['parents'] : null,
                     'name' => $file['name'],
                     'size' => isset($file['size']) ? $file['size'] : null,
                     'thumbnail_url' => isset($file['thumbnailLink']) ? $file['thumbnailLink'] : null,
