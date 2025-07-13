@@ -11,9 +11,12 @@ Route::get('/', function () {
 Route::get('/google/auth', [AuthController::class, 'googleAuth']);
 Route::get('/google/callback', [AuthController::class, 'googleCallback']);
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::group(['prefix' => 'dashboard'], function () {
         Route::get('/', [DashboardController::class, 'index']);
         Route::get('/sync', [DashboardController::class, 'sync']);
+        Route::group(['prefix' => 'f'], function () {
+            Route::get('/{id}', [DashboardController::class, 'show']);
+        });
     });
 });

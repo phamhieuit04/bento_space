@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\File;
 use App\Services\Dashboard\DashboardService;
 use Illuminate\Http\Request;
 
@@ -13,10 +14,8 @@ class DashboardController extends Controller
 
     public function index()
     {
-        $data = $this->dashboardService->all();
         return view('dashboard', [
-            'folders' => $data['folders'],
-            'files' => $data['files']
+            'data' => $this->dashboardService->all()
         ]);
     }
 
@@ -24,5 +23,12 @@ class DashboardController extends Controller
     {
         $this->dashboardService->sync();
         return redirect()->back();
+    }
+
+    public function show($id)
+    {
+        return view('dashboard', [
+            'data' => $this->dashboardService->show($id)
+        ]);
     }
 }
