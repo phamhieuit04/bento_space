@@ -46,4 +46,12 @@ class BaseRepository implements BaseRepositoryInterface
         $model = $this->findWhere($attributes);
         return blank($model) ? $this->create($values) : $model;
     }
+
+    public function updateOrCreate(array $attributes, array $values)
+    {
+        $model = self::findWhere($attributes);
+        return !blank($model) ?
+            self::update($values, $model->id) :
+            self::create($values);
+    }
 }
