@@ -14,6 +14,7 @@ class File extends Model
         'name',
         'size',
         'thumbnail_url',
+        'icon_url',
         'mime_type',
         'parents_id',
         'created_at',

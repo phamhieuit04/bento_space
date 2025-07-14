@@ -19,6 +19,7 @@ return new class extends Migration {
                 $table->dropColumn('size');
             }
             $table->text('thumbnail_url')->nullable();
+            $table->text('icon_url')->nullable();
             $table->bigInteger('size')->nullable();
             $table->text('mime_type')->nullable();
             $table->text('parents_id')->nullable();
