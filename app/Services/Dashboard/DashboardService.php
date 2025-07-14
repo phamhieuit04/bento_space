@@ -45,6 +45,7 @@ class DashboardService
                     'name' => $file['name'],
                     'size' => isset($file['size']) ? $file['size'] : null,
                     'thumbnail_url' => isset($file['thumbnailLink']) ? $file['thumbnailLink'] : asset('assets/default.jpg'),
+                    'icon_url' => isset($file['iconLink']) ? $file['iconLink'] : null,
                     'mime_type' => $file['mimeType'],
                     'created_at' => $file['createdTime'],
                     'updated_at' => $file['modifiedTime']

@@ -11,18 +11,23 @@
 
 <body>
     <div class="mx-auto container flex flex-col gap-8 m-5 items-start">
-        <div class="flex gap-5">
-            <button>
-                <a href="{{ url('/dashboard/sync') }}"
-                    class="bg-green-500 py-2.5 px-10 text-2xl font-bold text-white rounded-xl cursor-pointer hover:opacity-75 transition-all duration-200">Sync</a>
-            </button>
-            <button>
+        <div class="fixed top-0 left-0 right-0 container mx-auto bg-white h-20 flex items-center justify-between z-50">
+            <a href="{{ url('/dashboard/sync') }}"
+                class="inline-block px-5 py-1.5 border-black hover:border-green-500 border text-black rounded-sm text-lg leading-normal hover:bg-green-500 hover:text-white transition-all duration-200">
+                Sync
+            </a>
+            <div class="flex items-center gap-2">
                 <a href="{{ url('/google/refresh_token') }}"
-                    class="bg-green-500 py-2.5 px-10 text-2xl font-bold text-white rounded-xl cursor-pointer hover:opacity-75 transition-all duration-200">Refresh
-                    token</a>
-            </button>
+                    class="inline-block px-5 py-1.5 border-black hover:border-green-500 border text-black rounded-sm text-lg leading-normal hover:bg-green-500 hover:text-white transition-all duration-200">
+                    Refresh token
+                </a>
+                <a href="{{ url('/logout') }}"
+                    class="inline-block px-5 py-1.5 border-transparent hover:border-green-500 border text-black rounded-sm text-lg leading-normal hover:bg-green-500 hover:text-white transition-all duration-200">
+                    Logout
+                </a>
+            </div>
         </div>
-        <div class="flex flex-col gap-10">
+        <div class="flex flex-col gap-10 pt-20">
             @if (blank($data['folders']) && blank($data['files']))
                 <div class="w-[1000px]">
                     <h1 class="text-5xl font-bold">Không có gì ở đây hihi</h1>
@@ -54,7 +59,10 @@
                             @foreach ($data['files'] as $file)
                                 <li
                                     class="bg-[#f0f4f9] rounded-xl p-4 overflow-hidden h-60  hover:brightness-90 cursor-pointer transition-all duration-200">
-                                    <h1 class="truncate mb-2">{{ $file['name'] }}</h1>
+                                    <div class="flex gap-2 mb-2 items-center">
+                                        <img src="{{ $file['icon_url'] }}" alt="" class="size-5">
+                                        <h1 class="truncate">{{ $file['name'] }}</h1>
+                                    </div>
                                     <div class="h-full pb-6.5">
                                         <img src="{{ $file['thumbnail_url'] }}" alt=""
                                             class="object-cover h-full w-full rounded-md" />

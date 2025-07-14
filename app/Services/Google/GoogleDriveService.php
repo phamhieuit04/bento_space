@@ -16,7 +16,7 @@ class GoogleDriveService
     public function __construct()
     {
         $this->token = Auth::user()->access_token;
-        $this->fields = 'id,name,mimeType,size,thumbnailLink,createdTime,modifiedTime,parents';
+        $this->fields = 'id,name,mimeType,size,thumbnailLink,iconLink,parents,createdTime,modifiedTime';
     }
 
     public function all()

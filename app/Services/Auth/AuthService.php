@@ -19,13 +19,11 @@ class AuthService
     {
         $response = Google::getToken($code);
         $googleUser = Google::getAccountInfo($response['access_token']);
-        $user = $this->userRepo->firstOrCreate(['email' => $googleUser['email']], [
+        $user = $this->userRepo->updateOrCreate(['email' => $googleUser['email']], [
             'name' => $googleUser['name'],
             'email' => $googleUser['email'],
             'access_token' => $response['access_token'],
-            'access_token_expires_in' => $response['expires_in'],
             'refresh_token' => $response['refresh_token'],
-            'refresh_token_expires_in' => $response['refresh_token_expires_in']
         ]);
         Auth::login($user);
         $user->root_id = GoogleDrive::getRootId();
@@ -40,5 +38,11 @@ class AuthService
             'access_token' => $response['access_token']
         ], Auth::id());
         return !blank($update) ? true : false;
+    }
+
+    public function logout()
+    {
+        Auth::logout();
+        return true;
     }
 }

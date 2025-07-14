@@ -32,4 +32,10 @@ class AuthController extends Controller
         $this->authService->refreshToken(Auth::user()->refresh_token);
         return redirect()->back();
     }
+
+    public function logout()
+    {
+        $this->authService->logout();
+        return redirect('/');
+    }
 }
