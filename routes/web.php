@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\InfoController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -23,6 +23,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/sync', [DashboardController::class, 'sync']);
         Route::group(['prefix' => 'f'], function () {
             Route::get('/{id}', [DashboardController::class, 'show']);
+            Route::get('/{id}/info', [InfoController::class, 'info']);
+            Route::get('/{id}/download', [InfoController::class, 'download']);
         });
     });
 });

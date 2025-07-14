@@ -64,8 +64,10 @@
                                         <h1 class="truncate">{{ $file['name'] }}</h1>
                                     </div>
                                     <div class="h-full pb-6.5">
-                                        <img src="{{ $file['thumbnail_url'] }}" alt=""
-                                            class="object-cover h-full w-full rounded-md" />
+                                        <a href="{{ url('/dashboard/f/' . $file['drive_id'] . '/info') }}">
+                                            <img src="{{ $file['thumbnail_url'] }}" alt=""
+                                                class="object-cover h-full w-full rounded-md" />
+                                        </a>
                                     </div>
                                 </li>
                             @endforeach
