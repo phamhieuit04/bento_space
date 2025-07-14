@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Storage;
 class GoogleDriveService
 {
     const SERVICE_ENDPOINT = 'https://www.googleapis.com/drive/v3';
+    const THUMBNAIL_URL = 'https://drive.google.com/thumbnail';
+    const FILE_URL = 'https://drive.google.com/file';
     private $token;
     private $fields;
 
@@ -50,8 +52,7 @@ class GoogleDriveService
     {
         $response = Http::withToken($this->token)->throw()
             ->get(self::SERVICE_ENDPOINT . "/files/{$id}", ['alt' => 'media']);
-        Storage::put(self::find($id)['name'], $response->body());
-        return true;
+        return $response->body();
     }
 
     public function getRootId()
@@ -59,5 +60,15 @@ class GoogleDriveService
         $response = Http::withToken($this->token)->throw()
             ->get(self::SERVICE_ENDPOINT . '/files/root', ['fields' => 'id'])->json();
         return $response['id'];
+    }
+
+    public function getImageUrl(string $id)
+    {
+        return self::THUMBNAIL_URL . "?id={$id}&sz=w1000";
+    }
+
+    public function getVideoUrl(string $id)
+    {
+        return self::FILE_URL . "/d/{$id}/preview";
     }
 }
