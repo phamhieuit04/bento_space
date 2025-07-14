@@ -11,10 +11,17 @@
 
 <body>
     <div class="mx-auto container flex flex-col gap-8 m-5 items-start">
-        <button>
-            <a href="{{ url('/dashboard/sync') }}"
-                class="bg-green-500 py-2.5 px-10 text-2xl font-bold text-white rounded-xl cursor-pointer hover:opacity-75 transition-all duration-200">Sync</a>
-        </button>
+        <div class="flex gap-5">
+            <button>
+                <a href="{{ url('/dashboard/sync') }}"
+                    class="bg-green-500 py-2.5 px-10 text-2xl font-bold text-white rounded-xl cursor-pointer hover:opacity-75 transition-all duration-200">Sync</a>
+            </button>
+            <button>
+                <a href="{{ url('/google/refresh_token') }}"
+                    class="bg-green-500 py-2.5 px-10 text-2xl font-bold text-white rounded-xl cursor-pointer hover:opacity-75 transition-all duration-200">Refresh
+                    token</a>
+            </button>
+        </div>
         <div class="flex flex-col gap-10">
             @if (blank($data['folders']) && blank($data['files']))
                 <div class="w-[1000px]">

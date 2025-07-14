@@ -20,9 +20,11 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
-        'google_token',
-        'email_verified_at',
-        'root_id'
+        'root_id',
+        'access_token',
+        'access_token_expires_in',
+        'refresh_token',
+        'refresh_token_expires_in'
     ];
 
     /**
@@ -42,7 +44,7 @@ class User extends Authenticatable
     protected function casts(): array
     {
         return [
-            'email_verified_at' => 'datetime'
+            //
         ];
     }
 }

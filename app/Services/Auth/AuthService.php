@@ -17,17 +17,28 @@ class AuthService
 
     public function signin(string $code)
     {
-        $accessToken = Google::getAccessToken($code);
-        $googleUser = Google::getAccountInfo($accessToken);
+        $response = Google::getToken($code);
+        $googleUser = Google::getAccountInfo($response['access_token']);
         $user = $this->userRepo->firstOrCreate(['email' => $googleUser['email']], [
             'name' => $googleUser['name'],
             'email' => $googleUser['email'],
-            'email_verified_at' => now(),
-            'google_token' => $accessToken
+            'access_token' => $response['access_token'],
+            'access_token_expires_in' => $response['expires_in'],
+            'refresh_token' => $response['refresh_token'],
+            'refresh_token_expires_in' => $response['refresh_token_expires_in']
         ]);
         Auth::login($user);
         $user->root_id = GoogleDrive::getRootId();
         $user->touch();
         return true;
+    }
+
+    public function refreshToken(string $token)
+    {
+        $response = Google::refreshToken($token);
+        $update = $this->userRepo->update([
+            'access_token' => $response['access_token']
+        ], Auth::id());
+        return !blank($update) ? true : false;
     }
 }

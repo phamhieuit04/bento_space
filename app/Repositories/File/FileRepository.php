@@ -15,7 +15,7 @@ class FileRepository extends BaseRepository implements FileRepositoryInterface
 
     public function all()
     {
-        return $this->file->where('user_id', Auth::user()->id)
+        return $this->file->where('user_id', Auth::id())
             ->orderBy('created_at', 'desc')->get();
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Services\Dashboard;
 
+use App\Facades\Google\Google;
 use App\Facades\Google\GoogleDrive;
 use App\Repositories\File\FileRepositoryInterface;
 use Illuminate\Support\Facades\Auth;
@@ -39,7 +40,7 @@ class DashboardService
             if (!$this->fileRepo->findBy('drive_id', $file['id'])) {
                 $this->fileRepo->create([
                     'drive_id' => $file['id'],
-                    'user_id' => Auth::user()->id,
+                    'user_id' => Auth::id(),
                     'parents_id' => isset($file['parents']) ? $file['parents'] : null,
                     'name' => $file['name'],
                     'size' => isset($file['size']) ? $file['size'] : null,

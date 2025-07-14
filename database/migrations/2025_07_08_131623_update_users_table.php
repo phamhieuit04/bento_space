@@ -14,8 +14,14 @@ return new class extends Migration {
             if (Schema::hasColumn('users', 'password')) {
                 $table->dropColumn('password');
             };
-            $table->text('google_token')->nullable();
+            if (Schema::hasColumn('users', 'email_verified_at')) {
+                $table->dropColumn('email_verified_at');
+            };
             $table->text('root_id')->nullable();
+            $table->text('access_token')->nullable();
+            $table->integer('access_token_expires_in')->nullable();
+            $table->text('refresh_token')->nullable();
+            $table->integer('refresh_token_expires_in')->nullable();
             $table->dropTimestamps();
             $table->timestamps();
         });

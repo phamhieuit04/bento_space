@@ -13,29 +13,44 @@ class GoogleService
 
     public function getOAuthUrl()
     {
-        return self::GOOGLE_OAUTH2_URL .
+        $url = self::GOOGLE_OAUTH2_URL .
             '?client_id=' . env('GOOGLE_CLIENT_ID') .
             '&redirect_uri=' . env('GOOGLE_REDIRECT_URL') .
             '&response_type=code' .
-            '&scope=email%20profile%20openid%20' . self::GOOGLE_SCOPE_DRIVE .
-            "&prompt=select_account";
+            '&scope=email profile openid ' . self::GOOGLE_SCOPE_DRIVE .
+            '&prompt=select_account consent' .
+            '&access_type=offline';
+        return $url;
     }
 
-    public function getAccessToken(string $code)
+    public function getToken(string $code)
     {
-        $tokenResponse = Http::asForm()->post(self::GOOGLE_API_TOKEN_URL, [
+        $response = Http::asForm()->throw()->post(self::GOOGLE_API_TOKEN_URL, [
             'client_id' => env('GOOGLE_CLIENT_ID'),
             'client_secret' => env('GOOGLE_CLIENT_SECRET'),
             'code' => $code,
             'grant_type' => 'authorization_code',
             'redirect_uri' => env('GOOGLE_REDIRECT_URL')
-        ])->json();
-        return $tokenResponse['access_token'];
+        ]);
+        return $response->collect();
+    }
+
+    public function refreshToken(string $token)
+    {
+        $response = Http::asForm()->throw()->post(self::GOOGLE_API_TOKEN_URL, [
+            'client_id' => env('GOOGLE_CLIENT_ID'),
+            'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+            'grant_type' => 'refresh_token',
+            'refresh_token' => $token
+        ]);
+        $response->throw();
+        return $response->collect();
     }
 
     public function getAccountInfo(string $accessToken)
     {
-        return Http::withToken($accessToken)
-            ->get(self::GOOGLE_USER_INFO_URL)->collect();
+        $response = Http::withToken($accessToken)
+            ->throw()->get(self::GOOGLE_USER_INFO_URL);
+        return $response->collect();
     }
 }

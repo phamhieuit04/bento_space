@@ -8,8 +8,11 @@ Route::get('/', function () {
     return view('welcome');
 })->name('login');
 
-Route::get('/google/auth', [AuthController::class, 'googleAuth']);
-Route::get('/google/callback', [AuthController::class, 'googleCallback']);
+Route::group(['prefix' => 'google'], function () {
+    Route::get('/auth', [AuthController::class, 'auth']);
+    Route::get('/callback', [AuthController::class, 'callback']);
+    Route::get('/refresh_token', [AuthController::class, 'refreshToken']);
+});
 
 Route::middleware(['auth'])->group(function () {
     Route::group(['prefix' => 'dashboard'], function () {
