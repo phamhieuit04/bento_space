@@ -21,7 +21,7 @@ class AuthController extends Controller
     public function callback(Request $request)
     {
         $code = $request->input('code');
-        if ($this->authService->signin($code)) {
+        if ($this->authService->signin($request, $code)) {
             return redirect('/dashboard');
         }
         return redirect('/');
@@ -33,9 +33,9 @@ class AuthController extends Controller
         return redirect()->back();
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-        $this->authService->logout();
+        $this->authService->logout($request);
         return redirect('/');
     }
 }

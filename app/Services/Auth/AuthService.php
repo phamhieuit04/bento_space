@@ -4,9 +4,8 @@ namespace App\Services\Auth;
 
 use App\Facades\Google\Google;
 use App\Facades\Google\GoogleDrive;
-use App\Models\GoogleToken;
-use App\Models\User;
 use App\Repositories\User\UserRepositoryInterface;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AuthService
@@ -15,7 +14,7 @@ class AuthService
     {
     }
 
-    public function signin(string $code)
+    public function signin(Request $request, string $code)
     {
         $response = Google::getToken($code);
         $googleUser = Google::getAccountInfo($response['access_token']);
@@ -26,6 +25,7 @@ class AuthService
             'refresh_token' => $response['refresh_token'],
         ]);
         Auth::login($user);
+        $request->session()->regenerate();
         $user->root_id = GoogleDrive::getRootId();
         $user->touch();
         return true;
@@ -40,9 +40,15 @@ class AuthService
         return !blank($update) ? true : false;
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
+        $this->userRepo->update([
+            'access_token' => null,
+            'refresh_token' => null
+        ], Auth::id());
         Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
         return true;
     }
 }
