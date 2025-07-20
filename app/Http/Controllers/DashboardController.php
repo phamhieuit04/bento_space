@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\File;
 use App\Services\Dashboard\DashboardService;
 use Illuminate\Http\Request;
 
@@ -21,14 +20,27 @@ class DashboardController extends Controller
 
     public function sync()
     {
-        $this->dashboardService->sync();
-        return redirect()->back();
+        if ($this->dashboardService->sync()) {
+            return redirect()->back();
+        }
+        throw new \Exception('Something went wrong...');
     }
 
     public function show($id)
     {
         return view('dashboard', [
             'data' => $this->dashboardService->show($id)
+        ]);
+    }
+
+    public function search(Request $request)
+    {
+        $searchKey = $request->input('search_key');
+        if (blank($searchKey) || !isset($searchKey)) {
+            return redirect('/dashboard');
+        }
+        return view('dashboard', [
+            'data' => $this->dashboardService->search($searchKey)
         ]);
     }
 }

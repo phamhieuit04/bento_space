@@ -12,10 +12,23 @@
 <body>
     <div class="mx-auto container flex flex-col gap-8 m-5 items-start">
         <div class="fixed top-0 left-0 right-0 container mx-auto bg-white h-20 flex items-center justify-between z-50">
-            <a href="{{ url('/dashboard/sync') }}"
-                class="inline-block px-5 py-1.5 border-black hover:border-green-500 border text-black rounded-sm text-lg leading-normal hover:bg-green-500 hover:text-white transition-all duration-200">
-                Sync
-            </a>
+            <div class="flex items-center gap-5">
+                <a href="{{ url('/dashboard') }}" class="flex items-center">
+                    <iconify-icon icon="material-symbols:home" class="text-3xl text-green-500"></iconify-icon>
+                </a>
+                <div class="flex gap-2">
+                    <a href="{{ url('/dashboard/sync') }}"
+                        class="inline-block px-5 py-1.5 border-black hover:border-green-500 border text-black rounded-sm text-lg leading-normal hover:bg-green-500 hover:text-white transition-all duration-200">
+                        Sync
+                    </a>
+                    <form method="post" action="{{ url('/dashboard/search') }}"
+                        class="px-4 py-1.5 border-black hover:border-green-500 border text-black rounded-sm text-lg leading-normal">
+                        @csrf
+                        <input name="search_key" type="text" placeholder="search..."
+                            class="text-base outline-0 placeholder:italic">
+                    </form>
+                </div>
+            </div>
             <div class="flex items-center gap-2">
                 <a href="{{ url('/google/refresh_token') }}"
                     class="inline-block px-5 py-1.5 border-black hover:border-green-500 border text-black rounded-sm text-lg leading-normal hover:bg-green-500 hover:text-white transition-all duration-200">
@@ -27,7 +40,7 @@
                 </a>
             </div>
         </div>
-        <div class="flex flex-col gap-10 pt-20">
+        <div class="flex flex-col gap-10 pt-20 w-full">
             @if (blank($data['folders']) && blank($data['files']))
                 <div class="w-[1000px]">
                     <h1 class="text-5xl font-bold">Không có gì ở đây hihi</h1>

@@ -35,24 +35,25 @@ class DashboardService
 
     public function sync()
     {
-        $driveFiles = GoogleDrive::all();
-        foreach ($driveFiles as $file) {
-            if (!$this->fileRepo->findBy('drive_id', $file['id'])) {
-                $this->fileRepo->create([
+        try {
+            foreach (GoogleDrive::all() as $file) {
+                $this->fileRepo->updateOrCreate(['drive_id' => $file['id']], [
                     'drive_id' => $file['id'],
                     'user_id' => Auth::id(),
-                    'parents_id' => isset($file['parents']) ? $file['parents'] : null,
+                    'parents_id' => $file['parents'] ?? null,
                     'name' => $file['name'],
-                    'size' => isset($file['size']) ? $file['size'] : null,
-                    'thumbnail_url' => isset($file['thumbnailLink']) ? $file['thumbnailLink'] : asset('assets/default.jpg'),
-                    'icon_url' => isset($file['iconLink']) ? $file['iconLink'] : null,
+                    'size' => $file['size'] ?? null,
+                    'thumbnail_url' => $file['thumbnailLink'] ?? asset('assets/default.jpg'),
+                    'icon_url' => $file['iconLink'] ?? null,
                     'mime_type' => $file['mimeType'],
                     'created_at' => $file['createdTime'],
                     'updated_at' => $file['modifiedTime']
                 ]);
             }
+            return true;
+        } catch (\Throwable $th) {
+            return false;
         }
-        return true;
     }
 
     public function show($id)
@@ -68,6 +69,23 @@ class DashboardService
                     $data['files']->push($item);
             }
         });
+        return $data;
+    }
+
+    public function search(string $name)
+    {
+        $data = collect([
+            'files' => collect([]),
+            'folders' => collect([])
+        ]);
+        foreach (GoogleDrive::search($name) as $item) {
+            $file = $this->fileRepo->findBy('drive_id', $item['id']);
+            if ($file->mime_type == 'application/vnd.google-apps.folder') {
+                $data['folders']->push($file);
+            } else {
+                $data['files']->push($file);
+            }
+        }
         return $data;
     }
 }

@@ -26,5 +26,6 @@ Route::middleware(['auth'])->group(function () {
             Route::get('/{id}/info', [InfoController::class, 'info']);
             Route::get('/{id}/download', [InfoController::class, 'download']);
         });
+        Route::post('/search', [DashboardController::class, 'search']);
     });
 });
