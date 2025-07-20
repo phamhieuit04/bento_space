@@ -4,7 +4,6 @@ namespace App\Services\Google;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Storage;
 
 
 class GoogleDriveService
@@ -39,13 +38,13 @@ class GoogleDriveService
         return $response->collect();
     }
 
-    public function findByName(string $name)
+    public function search(string $name)
     {
         $response = Http::withToken($this->token)->throw()->get(
             self::SERVICE_ENDPOINT . '/files',
-            ['fields' => "files({$this->fields})", 'q' => "name = '{$name}'"]
+            ['fields' => "files({$this->fields})", 'q' => "name contains '{$name}'"]
         );
-        return $response->collect()['files'][0];
+        return $response->collect()['files'];
     }
 
     public function download(string $id)
