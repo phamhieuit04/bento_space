@@ -29,13 +29,17 @@ class AuthController extends Controller
 
     public function refreshToken()
     {
-        $this->authService->refreshToken(Auth::user()->refresh_token);
-        return redirect()->back();
+        if ($this->authService->refreshToken(Auth::user()->refresh_token)) {
+            return redirect()->back();
+        }
+        throw new \Exception('Something went wrong...');
     }
 
     public function logout(Request $request)
     {
-        $this->authService->logout($request);
-        return redirect('/');
+        if ($this->authService->logout($request)) {
+            return redirect('/');
+        }
+        throw new \Exception('Something went wrong...');
     }
 }

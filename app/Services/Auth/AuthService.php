@@ -16,19 +16,23 @@ class AuthService
 
     public function signin(Request $request, string $code)
     {
-        $response = Google::getToken($code);
-        $googleUser = Google::getAccountInfo($response['access_token']);
-        $user = $this->userRepo->updateOrCreate(['email' => $googleUser['email']], [
-            'name' => $googleUser['name'],
-            'email' => $googleUser['email'],
-            'access_token' => $response['access_token'],
-            'refresh_token' => $response['refresh_token'],
-        ]);
-        Auth::login($user);
-        $request->session()->regenerate();
-        $user->root_id = GoogleDrive::getRootId();
-        $user->touch();
-        return true;
+        try {
+            $response = Google::getToken($code);
+            $googleUser = Google::getAccountInfo($response['access_token']);
+            $user = $this->userRepo->updateOrCreate(['email' => $googleUser['email']], [
+                'name' => $googleUser['name'],
+                'email' => $googleUser['email'],
+                'access_token' => $response['access_token'],
+                'refresh_token' => $response['refresh_token'],
+            ]);
+            Auth::login($user);
+            $request->session()->regenerate();
+            $user->root_id = GoogleDrive::getRootId();
+            $user->touch();
+            return true;
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
 
     public function refreshToken(string $token)
@@ -42,13 +46,17 @@ class AuthService
 
     public function logout(Request $request)
     {
-        $this->userRepo->update([
-            'access_token' => null,
-            'refresh_token' => null
-        ], Auth::id());
-        Auth::logout();
-        $request->session()->invalidate();
-        $request->session()->regenerateToken();
-        return true;
+        try {
+            $this->userRepo->update([
+                'access_token' => null,
+                'refresh_token' => null
+            ], Auth::id());
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            return true;
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
 }

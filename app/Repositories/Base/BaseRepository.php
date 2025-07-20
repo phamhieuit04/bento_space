@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class BaseRepository implements BaseRepositoryInterface
 {
-    public function __construct(private Model $model)
+    public function __construct(protected Model $model)
     {
     }
 
@@ -37,7 +37,8 @@ class BaseRepository implements BaseRepositoryInterface
 
     public function update(array $attribute, $id)
     {
-        $update = $this->model->where('id', $id)->update($attribute);
+        $model = $this->model->find($id);
+        $update = $model->update($attribute);
         return $update ? $this->model->find($id) : null;
     }
 
