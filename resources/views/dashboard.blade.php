@@ -30,10 +30,12 @@
                 </div>
             </div>
             <div class="flex items-center gap-2">
-                <a href="{{ url('/google/refresh_token') }}"
-                    class="inline-block px-5 py-1.5 border-black hover:border-green-500 border text-black rounded-sm text-lg leading-normal hover:bg-green-500 hover:text-white transition-all duration-200">
-                    Refresh token
-                </a>
+                @if (request()->is('dashboard'))
+                    <a href="{{ url('/google/refresh_token') }}"
+                        class="inline-block px-5 py-1.5 border-black hover:border-green-500 border text-black rounded-sm text-lg leading-normal hover:bg-green-500 hover:text-white transition-all duration-200">
+                        Refresh token
+                    </a>
+                @endif
                 <a href="{{ url('/logout') }}"
                     class="inline-block px-5 py-1.5 border-transparent hover:border-green-500 border text-black rounded-sm text-lg leading-normal hover:bg-green-500 hover:text-white transition-all duration-200">
                     Logout
