@@ -18,13 +18,15 @@ Route::group(['prefix' => 'google'], function () {
 Route::middleware(['auth'])->group(function () {
     Route::get('/logout', [AuthController::class, 'logout']);
 
-    Route::group(['prefix' => 'dashboard'], function () {
-        Route::get('/', [DashboardController::class, 'index']);
-        Route::get('/sync', [DashboardController::class, 'sync']);
-        Route::group(['prefix' => 'f'], function () {
-            Route::get('/{id}', [DashboardController::class, 'show']);
-            Route::get('/{id}/info', [InfoController::class, 'info']);
-            Route::get('/{id}/download', [InfoController::class, 'download']);
+    Route::group(['prefix' => 'drive'], function () {
+        Route::group(['prefix' => 'dashboard'], function () {
+            Route::get('/', [DashboardController::class, 'index']);
+            Route::get('/sync', [DashboardController::class, 'sync']);
+            Route::group(['prefix' => 'f'], function () {
+                Route::get('/{id}', [DashboardController::class, 'show']);
+                Route::get('/{id}/info', [InfoController::class, 'info']);
+                Route::get('/{id}/download', [InfoController::class, 'download']);
+            });
         });
         Route::post('/search', [DashboardController::class, 'search']);
     });

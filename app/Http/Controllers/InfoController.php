@@ -14,7 +14,7 @@ class InfoController extends Controller
 
     public function info(Request $request, $id)
     {
-        return view('info', [
+        return view('pages.drive.info', [
             'file' => $this->infoService->show($id)
         ]);
     }

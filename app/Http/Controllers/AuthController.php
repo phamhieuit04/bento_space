@@ -22,7 +22,7 @@ class AuthController extends Controller
     {
         $code = $request->input('code');
         if ($this->authService->signin($request, $code)) {
-            return redirect('/dashboard');
+            return redirect('/drive/dashboard');
         }
         return redirect('/');
     }
@@ -30,7 +30,7 @@ class AuthController extends Controller
     public function refreshToken()
     {
         if ($this->authService->refreshToken(Auth::user()->refresh_token)) {
-            return redirect()->back();
+            return redirect('/drive/dashboard');
         }
         throw new \Exception('Something went wrong...');
     }

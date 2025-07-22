@@ -13,7 +13,7 @@ class DashboardController extends Controller
 
     public function index()
     {
-        return view('dashboard', [
+        return view('pages.drive.dashboard', [
             'data' => $this->dashboardService->all()
         ]);
     }
@@ -28,7 +28,7 @@ class DashboardController extends Controller
 
     public function show($id)
     {
-        return view('dashboard', [
+        return view('pages.drive.dashboard', [
             'data' => $this->dashboardService->show($id)
         ]);
     }
@@ -37,9 +37,9 @@ class DashboardController extends Controller
     {
         $searchKey = $request->input('search_key');
         if (blank($searchKey) || !isset($searchKey)) {
-            return redirect('/dashboard');
+            return redirect('/drive/dashboard');
         }
-        return view('dashboard', [
+        return view('pages.drive.dashboard', [
             'data' => $this->dashboardService->search($searchKey)
         ]);
     }

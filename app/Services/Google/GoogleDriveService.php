@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Http;
 class GoogleDriveService
 {
     const SERVICE_ENDPOINT = 'https://www.googleapis.com/drive/v3';
-    const THUMBNAIL_URL = 'https://drive.google.com/thumbnail';
+    const IMAGE_URL = 'https://drive.google.com/thumbnail';
     const FILE_URL = 'https://drive.google.com/file';
     private $token;
     private $fields;
@@ -63,7 +63,7 @@ class GoogleDriveService
 
     public function getImageUrl(string $id)
     {
-        return self::THUMBNAIL_URL . "?id={$id}&sz=w1000";
+        return self::IMAGE_URL . "?id={$id}&sz=w1000";
     }
 
     public function getVideoUrl(string $id)
