@@ -1,45 +1,47 @@
-<div
-    class="fixed top-0 right-0 left-0 z-50 flex h-20 items-center justify-between bg-white px-6"
+<flux:header
+    sticky
+    class="border-b border-zinc-200 bg-transparent py-3 backdrop-blur-2xl dark:border-zinc-700 dark:bg-transparent"
 >
     <div class="flex items-center gap-5">
         <a href="{{ url('/drive/dashboard') }}" class="flex items-center">
-            <h1 class="text-4xl font-bold">Bento Space</h1>
+            <h1 class="text-2xl font-bold">Bento Space</h1>
         </a>
-        <a
+        <flux:button
+            variant="primary"
             href="{{ url('/google/refresh_token') }}"
-            class="inline-block rounded-sm border border-black px-5 py-1.5 text-lg leading-normal text-black transition-all duration-200 hover:border-green-500 hover:bg-green-500 hover:text-white"
         >
             Refresh token
-        </a>
+        </flux:button>
     </div>
+    <flux:spacer />
     <div class="flex items-center gap-2">
         @if (request()->is('drive/*'))
-            <form
-                method="post"
-                action="{{ url('/drive/search') }}"
-                class="rounded-sm border border-black px-4 py-1.5 text-lg leading-normal text-black hover:border-green-500"
-            >
+            <form method="post" action="{{ url('/drive/search') }}">
                 @csrf
-                <input
+                <flux:input
                     name="search_key"
-                    type="text"
-                    placeholder="search..."
-                    class="text-base outline-0 placeholder:italic"
+                    icon="magnifying-glass"
+                    placeholder="Search..."
                 />
             </form>
-            <a
+            <flux:button
                 href="{{ url('/drive/dashboard/sync') }}"
-                class="inline-block rounded-sm border border-black px-5 py-1.5 text-lg leading-normal text-black transition-all duration-200 hover:border-green-500 hover:bg-green-500 hover:text-white"
+                variant="filled"
             >
                 Sync
-            </a>
+            </flux:button>
         @endif
 
-        <a
-            href="{{ url('/logout') }}"
-            class="inline-block rounded-sm border border-transparent px-5 py-1.5 text-lg leading-normal text-black transition-all duration-200 hover:border-green-500 hover:bg-green-500 hover:text-white"
-        >
+        <flux:button
+            x-data
+            x-on:click="$flux.dark = ! $flux.dark"
+            icon="moon"
+            variant="subtle"
+            aria-label="Toggle dark mode"
+        />
+        <flux:separator vertical />
+        <flux:button href="{{ url('/logout') }}" variant="ghost">
             Logout
-        </a>
+        </flux:button>
     </div>
-</div>
+</flux:header>
