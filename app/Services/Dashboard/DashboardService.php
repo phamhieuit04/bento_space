@@ -43,7 +43,7 @@ class DashboardService
                     'parents_id' => $file['parents'] ?? null,
                     'name' => $file['name'],
                     'size' => $file['size'] ?? null,
-                    'thumbnail_url' => $file['thumbnailLink'] ?? asset('assets/default.jpg'),
+                    'thumbnail_url' => $file['thumbnailLink'] ?? asset('assets/default.png'),
                     'icon_url' => $file['iconLink'] ?? null,
                     'mime_type' => $file['mimeType'],
                     'created_at' => $file['createdTime'],

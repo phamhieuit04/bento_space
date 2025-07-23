@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Facades\Google\GoogleDrive;
 use App\Services\Dashboard\InfoService;
 use Illuminate\Http\Request;
 
@@ -17,6 +16,11 @@ class InfoController extends Controller
         return view('pages.drive.info', [
             'file' => $this->infoService->show($id)
         ]);
+    }
+
+    public function stream(Request $request, $id)
+    {
+        return $this->infoService->stream($id);
     }
 
     public function download(Request $request, $id)

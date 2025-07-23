@@ -16,9 +16,16 @@ class InfoService
     {
         $file = $this->fileRepo->findBy('drive_id', $id);
         $file->readable_size = Number::fileSize($file->size);
-        $file->image_url = GoogleDrive::getImageUrl($id);
         $file->video_url = GoogleDrive::getVideoUrl($id);
         return $file;
+    }
+
+    public function stream($id)
+    {
+        $mime = $this->fileRepo->findBy('drive_id', $id)->mime_type;
+        $content = GoogleDrive::download($id);
+        return response($content)
+            ->header('Content-Type', $mime);
     }
 
     public function download($id)

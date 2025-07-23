@@ -25,6 +25,7 @@ Route::middleware(['auth'])->group(function () {
             Route::group(['prefix' => 'f'], function () {
                 Route::get('/{id}', [DashboardController::class, 'show']);
                 Route::get('/{id}/info', [InfoController::class, 'info']);
+                Route::get('/{id}/stream', [InfoController::class, 'stream']);
                 Route::get('/{id}/download', [InfoController::class, 'download']);
             });
         });
