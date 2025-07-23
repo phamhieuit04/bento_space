@@ -10,15 +10,15 @@
 
 @theme {
     --font-sans: Inter, sans-serif;
-    --color-accent: var(--color-rose-500);
-    --color-accent-content: var(--color-rose-500);
+    --color-accent: var(--color-indigo-500);
+    --color-accent-content: var(--color-indigo-600);
     --color-accent-foreground: var(--color-white);
 }
 
 @layer theme {
     .dark {
-        --color-accent: var(--color-rose-500);
-        --color-accent-content: var(--color-rose-400);
+        --color-accent: var(--color-indigo-500);
+        --color-accent-content: var(--color-indigo-300);
         --color-accent-foreground: var(--color-white);
     }
 }
