@@ -1,34 +1,49 @@
 @extends('layouts.master')
 @section('content')
-    <div class="flex grow flex-col gap-2 pt-24 pr-5">
-        <div class="my-2 flex items-center justify-between">
-            <div>
-                <h1 class="text-3xl font-semibold">{{ $file['name'] }}</h1>
-                <ul class="flex gap-2">
-                    <li class="border-r-2 border-gray-300 pr-2 text-lg">
+    <flux:main>
+        <flux:header class="px-0! py-3">
+            <flux:heading size="xl">{{ $file['name'] }}</flux:heading>
+            <flux:spacer />
+            <flux:dropdown>
+                <flux:button
+                    icon="information-circle"
+                    class="cursor-pointer!"
+                />
+                <flux:menu>
+                    <flux:menu.item class="cursor-pointer!">
+                        Name: {{ $file['name'] }}
+                    </flux:menu.item>
+                    <flux:menu.item class="cursor-pointer!">
                         Size: {{ $file['readable_size'] }}
-                    </li>
-                    <li class="border-r-2 border-gray-300 pr-2 text-lg">
+                    </flux:menu.item>
+                    <flux:menu.item class="cursor-pointer!">
+                        Type: {{ $file['mime_type'] }}
+                    </flux:menu.item>
+                    <flux:menu.item class="cursor-pointer!">
                         Created at: {{ $file['created_at'] }}
-                    </li>
-                    <li class="text-lg">
+                    </flux:menu.item>
+                    <flux:menu.item class="cursor-pointer!">
                         Updated at: {{ $file['created_at'] }}
-                    </li>
-                </ul>
-            </div>
-            <a
+                    </flux:menu.item>
+                </flux:menu>
+            </flux:dropdown>
+            <flux:separator vertical class="mx-2" />
+            <flux:button
                 href="{{ url('/drive/dashboard/f/' . $file['drive_id'] . '/download') }}"
                 download="{{ $file['name'] }}"
-                class="inline-block rounded-sm border border-black px-5 py-1.5 text-lg leading-normal text-black transition-all duration-200 hover:border-green-500 hover:bg-green-500 hover:text-white"
+                type="submit"
+                variant="primary"
             >
                 Download
-            </a>
-        </div>
-        <div class="flex h-[700px] items-center justify-center bg-black">
+            </flux:button>
+        </flux:header>
+        <div
+            class="flex h-[700px] items-center justify-center overflow-hidden bg-black"
+        >
             @if ($file['mime_type'] == 'image/jpeg' || $file['mime_type'] == 'image/png' || $file['mime_type'] == 'video/mp4')
                 @if ($file['mime_type'] == 'image/jpeg' || $file['mime_type'] == 'image/png')
                     <img
-                        src="{{ $file['image_url'] }}"
+                        src="{{ url('/drive/dashboard/f/' . $file['drive_id'] . '/stream') }}"
                         alt=""
                         class="h-[700px] object-contain"
                     />
@@ -42,8 +57,10 @@
                     ></iframe>
                 @endif
             @else
-                <h1 class="text-5xl font-bold text-white">No preview...</h1>
+                <h1 class="text-5xl font-bold text-white">
+                    Not supported yet.
+                </h1>
             @endif
         </div>
-    </div>
+    </flux:main>
 @endsection
