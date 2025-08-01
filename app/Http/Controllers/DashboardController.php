@@ -18,6 +18,15 @@ class DashboardController extends Controller
         ]);
     }
 
+    public function upload(Request $request)
+    {
+        $file = $request->file('file');
+        if ($this->dashboardService->upload($file)) {
+            return redirect()->back();
+        }
+        throw new \Exception('Something went wrong...');
+    }
+
     public function sync()
     {
         if ($this->dashboardService->sync()) {

@@ -5,6 +5,7 @@ namespace App\Services\Dashboard;
 use App\Facades\Google\Google;
 use App\Facades\Google\GoogleDrive;
 use App\Repositories\File\FileRepositoryInterface;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 
 class DashboardService
@@ -31,6 +32,29 @@ class DashboardService
             }
         });
         return $data;
+    }
+
+    public function upload(UploadedFile $file)
+    {
+        try {
+            $id = GoogleDrive::upload($file);
+            $file = GoogleDrive::find($id);
+            $this->fileRepo->create([
+                'drive_id' => $file['id'],
+                'user_id' => Auth::id(),
+                'parents_id' => $file['parents'] ?? null,
+                'name' => $file['name'],
+                'size' => $file['size'] ?? null,
+                'thumbnail_url' => $file['thumbnailLink'] ?? asset('assets/default.png'),
+                'icon_url' => $file['iconLink'] ?? null,
+                'mime_type' => $file['mimeType'],
+                'created_at' => $file['createdTime'],
+                'updated_at' => $file['modifiedTime']
+            ]);
+            return true;
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
 
     public function sync()
