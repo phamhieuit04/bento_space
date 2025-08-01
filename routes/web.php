@@ -9,20 +9,19 @@ Route::get('/', function () {
     return view('welcome');
 })->name('login');
 
-Route::group(['prefix' => 'google'], function () {
+Route::prefix('google')->group(function () {
     Route::get('/auth', [AuthController::class, 'auth']);
     Route::get('/callback', [AuthController::class, 'callback']);
     Route::get('/refresh_token', [AuthController::class, 'refreshToken']);
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/logout', [AuthController::class, 'logout']);
-
-    Route::group(['prefix' => 'drive'], function () {
-        Route::group(['prefix' => 'dashboard'], function () {
+    Route::prefix('drive')->group(function () {
+        Route::prefix('dashboard')->group(function () {
             Route::get('/', [DashboardController::class, 'index']);
+            Route::post('/upload', [DashboardController::class, 'upload']);
             Route::get('/sync', [DashboardController::class, 'sync']);
-            Route::group(['prefix' => 'f'], function () {
+            Route::prefix('f')->group(function () {
                 Route::get('/{id}', [DashboardController::class, 'show']);
                 Route::get('/{id}/info', [InfoController::class, 'info']);
                 Route::get('/{id}/stream', [InfoController::class, 'stream']);
@@ -31,4 +30,6 @@ Route::middleware(['auth'])->group(function () {
         });
         Route::post('/search', [DashboardController::class, 'search']);
     });
+
+    Route::get('/logout', [AuthController::class, 'logout']);
 });
