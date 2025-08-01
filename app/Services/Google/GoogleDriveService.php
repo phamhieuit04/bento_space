@@ -2,6 +2,7 @@
 
 namespace App\Services\Google;
 
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 
@@ -11,6 +12,7 @@ class GoogleDriveService
     const SERVICE_ENDPOINT = 'https://www.googleapis.com/drive/v3';
     const IMAGE_URL = 'https://drive.google.com/thumbnail';
     const FILE_URL = 'https://drive.google.com/file';
+    const UPLOAD_FILE_URL = 'https://www.googleapis.com/upload/drive/v3';
     private $token;
     private $fields;
 
@@ -45,6 +47,16 @@ class GoogleDriveService
             ['fields' => "files({$this->fields})", 'q' => "name contains '{$name}'"]
         );
         return $response->collect()['files'];
+    }
+
+    public function upload(UploadedFile $file)
+    {
+        $response = Http::withToken($this->token)->withHeaders([
+            'Content-Type' => $file->getClientMimeType(),
+            'Content-Length' => $file->getSize()
+        ])->withBody($file->getContent(), $file->getClientMimeType())
+            ->throw()->post(self::UPLOAD_FILE_URL . '/files', ['uploadType' => 'media']);
+        return $response->json('id');
     }
 
     public function download(string $id)
