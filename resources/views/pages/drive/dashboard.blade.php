@@ -2,9 +2,7 @@
 @section('content')
     <flux:main class="flex flex-col gap-8">
         @if (blank($data['folders']) && blank($data['files']))
-            <div>
-                <h1 class="text-5xl font-bold">Không có gì ở đây hihi</h1>
-            </div>
+            <h1 class="text-5xl font-bold">Không có gì ở đây hihi</h1>
         @else
             {{-- Folder --}}
             @if (! blank($data['folders']))
@@ -12,7 +10,6 @@
                     <flux:heading size="xl" level="1" class="mb-2 font-bold!">
                         My folders
                     </flux:heading>
-                    {{-- <h1 class="mb-3 text-3xl font-bold"></h1> --}}
                     <ul
                         class="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5"
                     >
@@ -83,4 +80,31 @@
             @endif
         @endif
     </flux:main>
+    <flux:modal.trigger name="upload_modal">
+        <flux:button
+            square
+            class="fixed! right-0 bottom-0 m-5 cursor-pointer p-8"
+            variant="primary"
+        >
+            <iconify-icon
+                icon="material-symbols:add-2-rounded"
+                class="text-2xl text-white"
+            ></iconify-icon>
+        </flux:button>
+    </flux:modal.trigger>
+
+    <flux:modal name="upload_modal" class="w-96">
+        <form
+            action="{{ url('/drive/dashboard/upload') }}"
+            method="post"
+            enctype="multipart/form-data"
+            class="flex flex-col gap-5"
+        >
+            @csrf
+            <flux:input type="file" label="Upload file" name="file" />
+            <flux:button type="submit" variant="primary" class="cursor-pointer">
+                Upload
+            </flux:button>
+        </form>
+    </flux:modal>
 @endsection

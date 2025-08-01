@@ -27,6 +27,7 @@
             @if (Route::has('login'))
                 <nav class="flex items-center justify-end gap-4">
                     <flux:switch
+                        class="cursor-pointer"
                         x-data
                         x-model="$flux.dark"
                         label="Dark mode"
