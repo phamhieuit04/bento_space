@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Services\Dashboard;
+namespace App\Services\Google\Drive;
 
-use App\Facades\Google\Google;
-use App\Facades\Google\GoogleDrive;
+use App\Facades\Google\GoogleDriveFacade;
 use App\Repositories\File\FileRepositoryInterface;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
@@ -37,8 +36,8 @@ class DashboardService
     public function upload(UploadedFile $file)
     {
         try {
-            $id = GoogleDrive::upload($file);
-            $file = GoogleDrive::find($id);
+            $id = GoogleDriveFacade::upload($file);
+            $file = GoogleDriveFacade::find($id);
             $this->fileRepo->create([
                 'drive_id' => $file['id'],
                 'user_id' => Auth::id(),
@@ -60,7 +59,7 @@ class DashboardService
     public function sync()
     {
         try {
-            foreach (GoogleDrive::all() as $file) {
+            foreach (GoogleDriveFacade::all() as $file) {
                 $this->fileRepo->updateOrCreate(['drive_id' => $file['id']], [
                     'drive_id' => $file['id'],
                     'user_id' => Auth::id(),
@@ -102,7 +101,7 @@ class DashboardService
             'files' => collect([]),
             'folders' => collect([])
         ]);
-        foreach (GoogleDrive::search($name) as $item) {
+        foreach (GoogleDriveFacade::search($name) as $item) {
             $file = $this->fileRepo->findBy('drive_id', $item['id']);
             if ($file->mime_type == 'application/vnd.google-apps.folder') {
                 $data['folders']->push($file);

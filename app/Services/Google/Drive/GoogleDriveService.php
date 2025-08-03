@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Services\Google;
+namespace App\Services\Google\Drive;
 
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
-
 
 class GoogleDriveService
 {

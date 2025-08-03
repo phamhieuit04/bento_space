@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\Dashboard\InfoService;
+use App\Services\Google\Drive\InfoService;
 use Illuminate\Http\Request;
 
 class InfoController extends Controller

@@ -2,8 +2,8 @@
 
 namespace App\Services\Auth;
 
-use App\Facades\Google\Google;
-use App\Facades\Google\GoogleDrive;
+use App\Facades\Google\GoogleAuthFacade;
+use App\Facades\Google\GoogleDriveFacade;
 use App\Repositories\User\UserRepositoryInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,8 +17,8 @@ class AuthService
     public function signin(Request $request, string $code)
     {
         try {
-            $response = Google::getToken($code);
-            $googleUser = Google::getAccountInfo($response['access_token']);
+            $response = GoogleAuthFacade::getToken($code);
+            $googleUser = GoogleAuthFacade::getAccountInfo($response['access_token']);
             $user = $this->userRepo->updateOrCreate(['email' => $googleUser['email']], [
                 'name' => $googleUser['name'],
                 'email' => $googleUser['email'],
@@ -27,7 +27,7 @@ class AuthService
             ]);
             Auth::login($user);
             $request->session()->regenerate();
-            $user->root_id = GoogleDrive::getRootId();
+            $user->root_id = GoogleDriveFacade::getRootId();
             $user->touch();
             return true;
         } catch (\Throwable $th) {
@@ -37,7 +37,7 @@ class AuthService
 
     public function refreshToken(string $token)
     {
-        $response = Google::refreshToken($token);
+        $response = GoogleAuthFacade::refreshToken($token);
         $update = $this->userRepo->update([
             'access_token' => $response['access_token']
         ], Auth::id());

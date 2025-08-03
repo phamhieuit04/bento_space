@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\Dashboard\DashboardService;
+use App\Services\Google\Drive\DashboardService;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller

@@ -5,7 +5,7 @@ namespace App\Services\Google;
 use App\Exceptions\GoogleException;
 use Illuminate\Support\Facades\Http;
 
-class GoogleService
+class GoogleAuthService
 {
     const GOOGLE_OAUTH2_URL = 'https://accounts.google.com/o/oauth2/v2/auth';
     const GOOGLE_API_TOKEN_URL = 'https://oauth2.googleapis.com/token';
