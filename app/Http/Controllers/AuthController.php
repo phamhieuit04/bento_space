@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Facades\Google\Google;
 use App\Services\Auth\AuthService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,7 +14,11 @@ class AuthController extends Controller
 
     public function auth()
     {
-        return redirect()->away(Google::getOAuthUrl());
+        $url = $this->authService->getOAuthUrl();
+        if (!blank($url)) {
+            return redirect()->away($url);
+        }
+        throw new \Exception('Something went wrong...');
     }
 
     public function callback(Request $request)

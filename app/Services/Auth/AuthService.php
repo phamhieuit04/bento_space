@@ -14,6 +14,11 @@ class AuthService
     {
     }
 
+    public function getOAuthUrl()
+    {
+        return GoogleAuthFacade::getOAuthUrl();
+    }
+
     public function signin(Request $request, string $code)
     {
         try {
