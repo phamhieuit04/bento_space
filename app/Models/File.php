@@ -13,6 +13,7 @@ class File extends Model
         'user_id',
         'name',
         'size',
+        'video_url',
         'thumbnail_url',
         'icon_url',
         'mime_type',
