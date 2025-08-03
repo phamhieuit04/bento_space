@@ -37,18 +37,20 @@ class DashboardService
     {
         try {
             $id = GoogleDriveFacade::upload($file);
-            $file = GoogleDriveFacade::find($id);
+            $driveFile = GoogleDriveFacade::find($id);
+            $updateFile = GoogleDriveFacade::update($id, $file->getClientOriginalName());
             $this->fileRepo->create([
-                'drive_id' => $file['id'],
+                'drive_id' => $driveFile['id'],
                 'user_id' => Auth::id(),
-                'parents_id' => $file['parents'] ?? null,
-                'name' => $file['name'],
-                'size' => $file['size'] ?? null,
-                'thumbnail_url' => $file['thumbnailLink'] ?? asset('assets/default.png'),
-                'icon_url' => $file['iconLink'] ?? null,
-                'mime_type' => $file['mimeType'],
-                'created_at' => $file['createdTime'],
-                'updated_at' => $file['modifiedTime']
+                'parents_id' => $driveFile['parents'] ?? null,
+                'name' => $updateFile['name'],
+                'size' => $driveFile['size'] ?? null,
+                'video_url' => 'https://drive.google.com/file/d/' . $id . '/preview',
+                'thumbnail_url' => $driveFile['thumbnailLink'] ?? asset('assets/default.png'),
+                'icon_url' => $driveFile['iconLink'] ?? null,
+                'mime_type' => $driveFile['mimeType'],
+                'created_at' => $driveFile['createdTime'],
+                'updated_at' => $driveFile['modifiedTime']
             ]);
             return true;
         } catch (\Throwable $th) {
@@ -66,6 +68,7 @@ class DashboardService
                     'parents_id' => $file['parents'] ?? null,
                     'name' => $file['name'],
                     'size' => $file['size'] ?? null,
+                    'video_url' => 'https://drive.google.com/file/d/' . $file['id'] . '/preview',
                     'thumbnail_url' => $file['thumbnailLink'] ?? asset('assets/default.png'),
                     'icon_url' => $file['iconLink'] ?? null,
                     'mime_type' => $file['mimeType'],

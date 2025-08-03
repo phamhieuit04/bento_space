@@ -16,7 +16,6 @@ class InfoService
     {
         $file = $this->fileRepo->findBy('drive_id', $id);
         $file->readable_size = Number::fileSize($file->size);
-        $file->video_url = GoogleDriveFacade::getVideoUrl($id);
         return $file;
     }
 
