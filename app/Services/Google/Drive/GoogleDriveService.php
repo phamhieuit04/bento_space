@@ -9,8 +9,6 @@ use Illuminate\Support\Facades\Http;
 class GoogleDriveService
 {
     const SERVICE_ENDPOINT = 'https://www.googleapis.com/drive/v3';
-    const IMAGE_URL = 'https://drive.google.com/thumbnail';
-    const FILE_URL = 'https://drive.google.com/file';
     const UPLOAD_FILE_URL = 'https://www.googleapis.com/upload/drive/v3';
     private $token;
     private $fields;
@@ -36,6 +34,13 @@ class GoogleDriveService
             self::SERVICE_ENDPOINT . "/files/{$id}",
             ['fields' => $this->fields]
         );
+        return $response->collect();
+    }
+
+    public function update(string $id, string $name)
+    {
+        $response = Http::withToken($this->token)->throw()
+            ->patch(self::SERVICE_ENDPOINT . "/files/$id", ['name' => $name]);
         return $response->collect();
     }
 
@@ -68,17 +73,7 @@ class GoogleDriveService
     public function getRootId()
     {
         $response = Http::withToken($this->token)->throw()
-            ->get(self::SERVICE_ENDPOINT . '/files/root', ['fields' => 'id'])->json();
-        return $response['id'];
-    }
-
-    public function getImageUrl(string $id)
-    {
-        return self::IMAGE_URL . "?id={$id}&sz=w1000";
-    }
-
-    public function getVideoUrl(string $id)
-    {
-        return self::FILE_URL . "/d/{$id}/preview";
+            ->get(self::SERVICE_ENDPOINT . '/files/root', ['fields' => 'id']);
+        return $response->json('id');
     }
 }
