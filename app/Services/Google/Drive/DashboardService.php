@@ -6,6 +6,7 @@ use App\Facades\Google\GoogleDriveFacade;
 use App\Repositories\File\FileRepositoryInterface;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class DashboardService
 {
@@ -36,24 +37,14 @@ class DashboardService
     public function upload(UploadedFile $file)
     {
         try {
-            $id = GoogleDriveFacade::upload($file);
-            $driveFile = GoogleDriveFacade::find($id);
-            $updateFile = GoogleDriveFacade::update($id, $file->getClientOriginalName());
-            $this->fileRepo->create([
-                'drive_id' => $driveFile['id'],
-                'user_id' => Auth::id(),
-                'parents_id' => $driveFile['parents'] ?? null,
-                'name' => $updateFile['name'],
-                'size' => $driveFile['size'] ?? null,
-                'video_url' => 'https://drive.google.com/file/d/' . $id . '/preview',
-                'thumbnail_url' => $driveFile['thumbnailLink'] ?? asset('assets/default.png'),
-                'icon_url' => $driveFile['iconLink'] ?? null,
-                'mime_type' => $driveFile['mimeType'],
-                'created_at' => $driveFile['createdTime'],
-                'updated_at' => $driveFile['modifiedTime']
-            ]);
+            $driveFile = GoogleDriveFacade::upload($file);
+            GoogleDriveFacade::update($driveFile['id'], $file->getClientOriginalName());
+            if (!$this->sync()) {
+                return false;
+            }
             return true;
         } catch (\Throwable $th) {
+            Log::error($th);
             return false;
         }
     }
@@ -78,6 +69,7 @@ class DashboardService
             }
             return true;
         } catch (\Throwable $th) {
+            Log::error($th);
             return false;
         }
     }

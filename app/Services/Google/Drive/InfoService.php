@@ -4,6 +4,7 @@ namespace App\Services\Google\Drive;
 
 use App\Facades\Google\GoogleDriveFacade;
 use App\Repositories\File\FileRepositoryInterface;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Number;
 
 class InfoService
@@ -46,6 +47,7 @@ class InfoService
             }
             return true;
         } catch (\Throwable $th) {
+            Log::error($th);
             return false;
         }
     }
