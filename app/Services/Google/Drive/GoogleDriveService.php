@@ -40,6 +40,7 @@ class GoogleDriveService
     public function update(string $id, string $name)
     {
         $response = Http::withToken($this->token)->throw()
+            ->withQueryParameters(['fields' => $this->fields])
             ->patch(self::SERVICE_ENDPOINT . "/files/$id", ['name' => $name]);
         return $response->collect();
     }

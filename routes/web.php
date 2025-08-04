@@ -26,6 +26,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('/{id}/info', [InfoController::class, 'info']);
                 Route::get('/{id}/stream', [InfoController::class, 'stream']);
                 Route::get('/{id}/download', [InfoController::class, 'download']);
+                Route::post('/{id}/rename', [InfoController::class, 'rename']);
             });
         });
         Route::post('/search', [DashboardController::class, 'search']);

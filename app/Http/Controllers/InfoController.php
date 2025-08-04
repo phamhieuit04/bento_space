@@ -27,4 +27,13 @@ class InfoController extends Controller
     {
         return $this->infoService->download($id);
     }
+
+    public function rename(Request $request, $id)
+    {
+        $params = $request->all();
+        if ($this->infoService->rename($id, $params['name'])) {
+            return redirect()->back();
+        }
+        throw new \Exception('Something went wrong...');
+    }
 }

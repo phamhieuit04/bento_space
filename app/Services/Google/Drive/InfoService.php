@@ -31,4 +31,22 @@ class InfoService
     {
         return GoogleDriveFacade::download($id);
     }
+
+    public function rename($id, string $name)
+    {
+        try {
+            $driveUpdate = GoogleDriveFacade::update($id, $name);
+            $file = $this->fileRepo->findBy('drive_id', $id);
+            $update = $this->fileRepo->update([
+                'name' => $driveUpdate['name'],
+                'updated_at' => $driveUpdate['modifiedTime']
+            ], $file->id);
+            if (blank($update)) {
+                return false;
+            }
+            return true;
+        } catch (\Throwable $th) {
+            return false;
+        }
+    }
 }
