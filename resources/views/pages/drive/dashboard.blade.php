@@ -1,5 +1,6 @@
 @extends('layouts.master')
 @section('content')
+    @include('modals.drive.upload')
     <flux:main class="flex flex-col gap-8">
         @if (blank($data['folders']) && blank($data['files']))
             <h1 class="text-5xl font-bold">Không có gì ở đây hihi</h1>
@@ -47,7 +48,7 @@
                     >
                         @foreach ($data['files'] as $file)
                             <li
-                                class="h-60 cursor-pointer overflow-hidden rounded-xl bg-[#f0f4f9] p-4 transition-all duration-200 hover:brightness-90 dark:bg-[#303032]"
+                                class="h-64 cursor-pointer overflow-hidden rounded-xl bg-[#f0f4f9] p-4 transition-all duration-200 hover:brightness-90 dark:bg-[#303032]"
                             >
                                 <div class="mb-2 flex items-center gap-2">
                                     <img
@@ -80,6 +81,7 @@
             @endif
         @endif
     </flux:main>
+
     <flux:modal.trigger name="upload_modal">
         <flux:button
             square
@@ -92,19 +94,4 @@
             ></iconify-icon>
         </flux:button>
     </flux:modal.trigger>
-
-    <flux:modal name="upload_modal" class="w-96">
-        <form
-            action="{{ url('/drive/dashboard/upload') }}"
-            method="post"
-            enctype="multipart/form-data"
-            class="flex flex-col gap-5"
-        >
-            @csrf
-            <flux:input type="file" label="Upload file" name="file" />
-            <flux:button type="submit" variant="primary" class="cursor-pointer">
-                Upload
-            </flux:button>
-        </form>
-    </flux:modal>
 @endsection
