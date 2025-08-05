@@ -2,6 +2,7 @@
 
 namespace App\Services\Google\Drive;
 
+use App\Enums\Drive\TrashStatus;
 use App\Facades\Google\GoogleDriveFacade;
 use App\Repositories\File\FileRepositoryInterface;
 use Illuminate\Http\UploadedFile;
@@ -14,21 +15,23 @@ class DashboardService
     {
     }
 
-    public function all()
+    public function all(bool $trashed = false)
     {
         $data = collect([
             'folders' => collect([]),
             'files' => collect([])
         ]);
         $rootId = Auth::user()->root_id;
-        $items = $this->fileRepo->all();
-        $items->each(function ($item) use ($data, $rootId) {
-            if (!blank($item->parents_id)) {
-                if ($item->parents_id->contains($rootId)) {
-                    $item->mime_type == 'application/vnd.google-apps.folder' ?
-                        $data['folders']->push($item) :
-                        $data['files']->push($item);
-                }
+        $trashStatus = $trashed ? TrashStatus::TRASHED->value : TrashStatus::NOT_TRASHED->value;
+        $this->fileRepo->all()->each(function ($item) use ($data, $rootId, $trashStatus) {
+            if (
+                !blank($item->parents_id)
+                && $item->parents_id->contains($rootId)
+                && $item->trashed == $trashStatus
+            ) {
+                $item->mime_type == 'application/vnd.google-apps.folder' ?
+                    $data['folders']->push($item) :
+                    $data['files']->push($item);
             }
         });
         return $data;
@@ -38,7 +41,10 @@ class DashboardService
     {
         try {
             $driveFile = GoogleDriveFacade::upload($file);
-            GoogleDriveFacade::update($driveFile['id'], $file->getClientOriginalName());
+            GoogleDriveFacade::update(
+                $driveFile['id'],
+                ['name' => $file->getClientOriginalName()]
+            );
             if (!$this->sync()) {
                 return false;
             }
@@ -58,11 +64,12 @@ class DashboardService
                     'user_id' => Auth::id(),
                     'parents_id' => $file['parents'] ?? null,
                     'name' => $file['name'],
-                    'size' => $file['size'] ?? null,
+                    'size' => $file['size'] ?? 0,
                     'video_url' => 'https://drive.google.com/file/d/' . $file['id'] . '/preview',
                     'thumbnail_url' => $file['thumbnailLink'] ?? asset('assets/default.png'),
                     'icon_url' => $file['iconLink'] ?? null,
                     'mime_type' => $file['mimeType'],
+                    'trashed' => $file['trashed'] ? TrashStatus::TRASHED : TrashStatus::NOT_TRASHED,
                     'created_at' => $file['createdTime'],
                     'updated_at' => $file['modifiedTime']
                 ]);
