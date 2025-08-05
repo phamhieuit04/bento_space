@@ -17,7 +17,7 @@ class GoogleDriveService
     public function __construct()
     {
         $this->token = Auth::user()->access_token;
-        $this->fields = 'id,name,mimeType,size,thumbnailLink,iconLink,parents,createdTime,modifiedTime';
+        $this->fields = 'id,name,mimeType,size,thumbnailLink,iconLink,parents,trashed,createdTime,modifiedTime';
     }
 
     public function all()
@@ -44,11 +44,11 @@ class GoogleDriveService
         return $response->collect();
     }
 
-    public function update(string $id, string $name)
+    public function update(string $id, array $data)
     {
         $response = Http::withToken($this->token)
             ->withQueryParameters(['fields' => $this->fields])
-            ->patch(self::SERVICE_ENDPOINT . "/files/$id", ['name' => $name]);
+            ->patch(self::SERVICE_ENDPOINT . "/files/$id", $data);
         if ($response->failed()) {
             throw new GoogleException($response);
         }
