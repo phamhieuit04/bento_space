@@ -15,10 +15,12 @@
                         class="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5"
                     >
                         @foreach ($data['folders'] as $folder)
-                            <li>
+                            <li
+                                class="group flex h-15 cursor-pointer items-center justify-between gap-2 overflow-hidden rounded-xl bg-[#f0f4f9] p-4 transition-all duration-200 hover:brightness-90 dark:bg-[#303032]"
+                            >
                                 <a
                                     href="{{ url("/drive/dashboard/f/{$folder['drive_id']}") }}"
-                                    class="flex h-15 cursor-pointer items-center gap-2 overflow-hidden rounded-xl bg-[#f0f4f9] p-4 transition-all duration-200 hover:brightness-90 dark:bg-[#303032]"
+                                    class="flex grow items-center gap-2 overflow-hidden"
                                 >
                                     <iconify-icon
                                         icon="material-symbols:folder"
@@ -31,6 +33,7 @@
                                         {{ $folder['name'] }}
                                     </flux:text>
                                 </a>
+                                @include('components.drive.tooltip', ['item' => $folder])
                             </li>
                         @endforeach
                     </ul>
@@ -48,20 +51,28 @@
                     >
                         @foreach ($data['files'] as $file)
                             <li
-                                class="h-64 cursor-pointer overflow-hidden rounded-xl bg-[#f0f4f9] p-4 transition-all duration-200 hover:brightness-90 dark:bg-[#303032]"
+                                class="group h-64 cursor-pointer overflow-hidden rounded-xl bg-[#f0f4f9] p-4 transition-all duration-200 hover:brightness-90 dark:bg-[#303032]"
                             >
-                                <div class="mb-2 flex items-center gap-2">
-                                    <img
-                                        src="{{ $file['icon_url'] }}"
-                                        alt=""
-                                        class="size-5"
-                                    />
-                                    <flux:text
-                                        variant="strong"
-                                        class="truncate"
+                                <div
+                                    class="mb-2 flex items-center justify-between gap-2"
+                                >
+                                    <div
+                                        class="flex items-center gap-2 overflow-hidden"
                                     >
-                                        {{ $file['name'] }}
-                                    </flux:text>
+                                        <img
+                                            src="{{ $file['icon_url'] }}"
+                                            alt=""
+                                            class="size-5"
+                                        />
+                                        <flux:text
+                                            variant="strong"
+                                            class="truncate"
+                                        >
+                                            {{ $file['name'] }}
+                                        </flux:text>
+                                    </div>
+                                    @include(
+                                    'components.drive.tooltip', ['item' => $file]                                    )
                                 </div>
                                 <div class="h-full pb-6.5">
                                     <a

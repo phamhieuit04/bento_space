@@ -1,49 +1,10 @@
 @extends('layouts.master')
 @section('content')
-    @include('modals.drive.rename', ['id' => $file['drive_id']])
     <flux:main>
         <flux:header class="px-0! py-3">
             <flux:heading size="xl">{{ $file['name'] }}</flux:heading>
             <flux:spacer />
-            <flux:dropdown>
-                <flux:button
-                    square
-                    icon="ellipsis-horizontal"
-                    class="cursor-pointer!"
-                />
-                <flux:menu>
-                    <flux:modal.trigger name="rename_modal">
-                        <flux:button
-                            icon="pencil-square"
-                            variant="ghost"
-                            class="flex w-full justify-start"
-                        >
-                            Rename
-                        </flux:button>
-                    </flux:modal.trigger>
-                    <flux:menu.separator />
-                    <flux:menu.submenu
-                        heading="Information"
-                        icon="information-circle"
-                    >
-                        <flux:menu.item class="cursor-pointer!">
-                            Name: {{ $file['name'] }}
-                        </flux:menu.item>
-                        <flux:menu.item class="cursor-pointer!">
-                            Size: {{ $file['readable_size'] }}
-                        </flux:menu.item>
-                        <flux:menu.item class="cursor-pointer!">
-                            Type: {{ $file['mime_type'] }}
-                        </flux:menu.item>
-                        <flux:menu.item class="cursor-pointer!">
-                            Created at: {{ $file['created_at'] }}
-                        </flux:menu.item>
-                        <flux:menu.item class="cursor-pointer!">
-                            Updated at: {{ $file['updated_at'] }}
-                        </flux:menu.item>
-                    </flux:menu.submenu>
-                </flux:menu>
-            </flux:dropdown>
+            @include('components.drive.tooltip', ['item' => $file])
             <flux:separator vertical class="mx-2" />
             <flux:button
                 href="{{ url('/drive/dashboard/f/' . $file['drive_id'] . '/download') }}"
