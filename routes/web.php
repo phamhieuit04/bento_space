@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\InfoController;
+use App\Http\Controllers\TrashController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -27,7 +28,11 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('/{id}/stream', [InfoController::class, 'stream']);
                 Route::get('/{id}/download', [InfoController::class, 'download']);
                 Route::post('/{id}/rename', [InfoController::class, 'rename']);
+                Route::post('/{id}/trash', [TrashController::class, 'trash']);
             });
+        });
+        Route::prefix('trash')->group(function () {
+            Route::get('/', [TrashController::class, 'index']);
         });
         Route::post('/search', [DashboardController::class, 'search']);
     });
