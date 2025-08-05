@@ -1,6 +1,6 @@
-<flux:modal name="rename_modal" class="w-96">
+<flux:modal name="{{ 'rename_modal_' . $item['drive_id'] }}" class="w-96">
     <form
-        action="{{ url("/drive/dashboard/f/$id/rename") }}"
+        action="{{ url("/drive/dashboard/f/{$item['drive_id']}/rename") }}"
         method="post"
         class="flex flex-col gap-5"
     >
@@ -11,7 +11,12 @@
                 Make changes to your file/folder's name.
             </flux:text>
         </div>
-        <flux:input label="Name" placeholder="..." name="name" />
+        <flux:input
+            label="Name"
+            placeholder="..."
+            name="name"
+            value="{{ $item['name'] }}"
+        />
         <flux:button type="submit" variant="primary" class="cursor-pointer">
             Submit
         </flux:button>
