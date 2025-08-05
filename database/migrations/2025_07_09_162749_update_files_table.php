@@ -24,6 +24,7 @@ return new class extends Migration {
             $table->bigInteger('size')->nullable();
             $table->text('mime_type')->nullable();
             $table->text('parents_id')->nullable();
+            $table->boolean('trashed');
             $table->dropTimestamps();
             $table->timestamps();
         });
