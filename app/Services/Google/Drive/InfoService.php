@@ -5,7 +5,6 @@ namespace App\Services\Google\Drive;
 use App\Facades\Google\GoogleDriveFacade;
 use App\Repositories\File\FileRepositoryInterface;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Number;
 
 class InfoService
 {
@@ -16,7 +15,6 @@ class InfoService
     public function show($id)
     {
         $file = $this->fileRepo->findBy('drive_id', $id);
-        $file->readable_size = Number::fileSize($file->size);
         return $file;
     }
 
@@ -36,7 +34,7 @@ class InfoService
     public function rename($id, string $name)
     {
         try {
-            $driveUpdate = GoogleDriveFacade::update($id, $name);
+            $driveUpdate = GoogleDriveFacade::update($id, ['name' => $name]);
             $file = $this->fileRepo->findBy('drive_id', $id);
             $update = $this->fileRepo->update([
                 'name' => $driveUpdate['name'],
