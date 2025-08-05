@@ -2,7 +2,9 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Number;
 
 class File extends Model
 {
@@ -18,6 +20,7 @@ class File extends Model
         'icon_url',
         'mime_type',
         'parents_id',
+        'trashed',
         'created_at',
         'updated_at'
     ];
@@ -29,5 +32,12 @@ class File extends Model
             'updated_at' => 'datetime',
             'parents_id' => 'collection'
         ];
+    }
+
+    protected function size(): Attribute
+    {
+        return Attribute::make(
+            fn(int $value) => Number::fileSize($value)
+        );
     }
 }
