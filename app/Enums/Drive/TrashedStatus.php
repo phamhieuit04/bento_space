@@ -2,7 +2,7 @@
 
 namespace App\Enums\Drive;
 
-enum TrashStatus: int
+enum TrashedStatus: int
 {
     case TRASHED = 1;
     case NOT_TRASHED = 0;
