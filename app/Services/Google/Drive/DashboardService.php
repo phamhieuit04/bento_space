@@ -2,7 +2,7 @@
 
 namespace App\Services\Google\Drive;
 
-use App\Enums\Drive\TrashStatus;
+use App\Enums\Drive\TrashedStatus;
 use App\Facades\Google\GoogleDriveFacade;
 use App\Repositories\File\FileRepositoryInterface;
 use Illuminate\Http\UploadedFile;
@@ -13,20 +13,15 @@ class DashboardService
 {
     public function __construct(private FileRepositoryInterface $fileRepo) {}
 
-    public function all(bool $trashed = false)
+    public function all()
     {
         $data = collect([
             'folders' => collect([]),
             'files' => collect([])
         ]);
         $rootId = Auth::user()->root_id;
-        $trashStatus = $trashed ? TrashStatus::TRASHED->value : TrashStatus::NOT_TRASHED->value;
-        $this->fileRepo->all()->each(function ($item) use ($data, $rootId, $trashStatus) {
-            if (
-                !blank($item->parents_id)
-                && $item->parents_id->contains($rootId)
-                && $item->trashed == $trashStatus
-            ) {
+        $this->fileRepo->all()->each(function ($item) use ($data, $rootId) {
+            if (!blank($item->parents_id) && $item->parents_id->contains($rootId)) {
                 $item->mime_type == 'application/vnd.google-apps.folder' ?
                     $data['folders']->push($item) :
                     $data['files']->push($item);
@@ -43,10 +38,7 @@ class DashboardService
                 $driveFile['id'],
                 ['name' => $file->getClientOriginalName()]
             );
-            if (!$this->sync()) {
-                return false;
-            }
-            return true;
+            return !$this->sync() ? false : true;
         } catch (\Throwable $th) {
             Log::error($th);
             return false;
@@ -69,9 +61,10 @@ class DashboardService
                     'icon_url' => $file['iconLink'] ?? null,
                     'mime_type' => $file['mimeType'],
                     'extension' => $file['fullFileExtension'] ?? null,
-                    'trashed' => $file['trashed'] ? TrashStatus::TRASHED : TrashStatus::NOT_TRASHED,
+                    'trashed' => $file['trashed'] ? TrashedStatus::TRASHED : TrashedStatus::NOT_TRASHED,
                     'created_at' => $file['createdTime'],
-                    'updated_at' => $file['modifiedTime']
+                    'updated_at' => $file['modifiedTime'],
+                    'trashed_at' => $file['trashedTime'] ?? null
                 ]);
             }
             return true;
@@ -105,11 +98,9 @@ class DashboardService
         ]);
         foreach (GoogleDriveFacade::search($name) as $item) {
             $file = $this->fileRepo->findBy('drive_id', $item['id']);
-            if ($file->mime_type == 'application/vnd.google-apps.folder') {
-                $data['folders']->push($file);
-            } else {
-                $data['files']->push($file);
-            }
+            $file->mime_type == 'application/vnd.google-apps.folder'
+                ? $data['folders']->push($file)
+                : $data['files']->push($file);
         }
         return $data;
     }

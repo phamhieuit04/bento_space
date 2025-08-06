@@ -39,10 +39,7 @@ class InfoService
                 'name' => $driveUpdate['name'],
                 'updated_at' => $driveUpdate['modifiedTime']
             ], $file->id);
-            if (blank($update)) {
-                return false;
-            }
-            return true;
+            return blank($update) ? false : true;
         } catch (\Throwable $th) {
             Log::error($th);
             return false;
