@@ -1,9 +1,9 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\InfoController;
-use App\Http\Controllers\TrashController;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Drive\DashboardController;
+use App\Http\Controllers\Drive\InfoController;
+use App\Http\Controllers\Drive\TrashController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {

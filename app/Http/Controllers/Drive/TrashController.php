@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Drive;
 
+use App\Http\Controllers\Controller;
 use App\Services\Google\Drive\TrashService;
 use Illuminate\Http\Request;
 
