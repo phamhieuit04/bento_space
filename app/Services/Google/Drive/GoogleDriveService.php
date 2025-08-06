@@ -17,7 +17,7 @@ class GoogleDriveService
     public function __construct()
     {
         $this->token = Auth::user()->access_token;
-        $this->fields = 'id,name,mimeType,size,thumbnailLink,iconLink,parents,trashed,createdTime,modifiedTime';
+        $this->fields = 'id,name,fullFileExtension,webContentLink,mimeType,size,thumbnailLink,iconLink,parents,trashed,createdTime,modifiedTime';
     }
 
     public function all()
@@ -81,7 +81,7 @@ class GoogleDriveService
         return $response->collect();
     }
 
-    public function download(string $id)
+    public function stream(string $id)
     {
         $response = Http::withToken($this->token)
             ->get(self::SERVICE_ENDPOINT . "/files/{$id}", ['alt' => 'media']);
