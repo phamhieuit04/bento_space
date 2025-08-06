@@ -7,8 +7,19 @@
         icon="ellipsis-horizontal"
         class="cursor-pointer! rounded-full!"
     />
-    <flux:menu>
+    <flux:menu class="max-w-52">
         @if (request()->is('drive/dashboard') || request()->is('drive/dashboard/*'))
+            @if ($item['mime_type'] != 'application/vnd.google-apps.folder')
+                <flux:button
+                    href="{{ url('/drive/dashboard/f/' . $item['drive_id'] . '/download') }}"
+                    icon="arrow-down-tray"
+                    variant="ghost"
+                    class="flex w-full cursor-pointer justify-start"
+                >
+                    Download
+                </flux:button>
+            @endif
+
             <flux:modal.trigger
                 name="{{ 'rename_modal_' . $item['drive_id'] }}"
             >

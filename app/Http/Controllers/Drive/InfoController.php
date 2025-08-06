@@ -8,9 +8,7 @@ use Illuminate\Http\Request;
 
 class InfoController extends Controller
 {
-    public function __construct(private InfoService $infoService)
-    {
-    }
+    public function __construct(private InfoService $infoService) {}
 
     public function info(Request $request, $id)
     {
@@ -26,7 +24,7 @@ class InfoController extends Controller
 
     public function download(Request $request, $id)
     {
-        return $this->infoService->download($id);
+        return redirect()->away($this->infoService->download($id));
     }
 
     public function rename(Request $request, $id)

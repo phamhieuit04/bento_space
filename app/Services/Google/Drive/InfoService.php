@@ -8,9 +8,7 @@ use Illuminate\Support\Facades\Log;
 
 class InfoService
 {
-    public function __construct(private FileRepositoryInterface $fileRepo)
-    {
-    }
+    public function __construct(private FileRepositoryInterface $fileRepo) {}
 
     public function show($id)
     {
@@ -21,14 +19,15 @@ class InfoService
     public function stream($id)
     {
         $mime = $this->fileRepo->findBy('drive_id', $id)->mime_type;
-        $content = GoogleDriveFacade::download($id);
+        $content = GoogleDriveFacade::stream($id);
         return response($content)
             ->header('Content-Type', $mime);
     }
 
     public function download($id)
     {
-        return GoogleDriveFacade::download($id);
+        $file = $this->fileRepo->findBy('drive_id', $id);
+        return $file->download_url;
     }
 
     public function rename($id, string $name)

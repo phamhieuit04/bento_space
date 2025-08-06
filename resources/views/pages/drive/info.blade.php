@@ -5,15 +5,6 @@
             <flux:heading size="xl">{{ $file['name'] }}</flux:heading>
             <flux:spacer />
             @include('components.drive.tooltip', ['item' => $file])
-            <flux:separator vertical class="mx-2" />
-            <flux:button
-                href="{{ url('/drive/dashboard/f/' . $file['drive_id'] . '/download') }}"
-                download="{{ $file['name'] }}"
-                type="submit"
-                variant="primary"
-            >
-                Download
-            </flux:button>
         </flux:header>
         <div
             class="flex h-[700px] items-center justify-center overflow-hidden bg-black"

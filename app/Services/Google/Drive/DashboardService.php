@@ -11,9 +11,7 @@ use Illuminate\Support\Facades\Log;
 
 class DashboardService
 {
-    public function __construct(private FileRepositoryInterface $fileRepo)
-    {
-    }
+    public function __construct(private FileRepositoryInterface $fileRepo) {}
 
     public function all(bool $trashed = false)
     {
@@ -65,10 +63,12 @@ class DashboardService
                     'parents_id' => $file['parents'] ?? null,
                     'name' => $file['name'],
                     'size' => $file['size'] ?? 0,
+                    'download_url' => $file['webContentLink'] ?? null,
                     'video_url' => 'https://drive.google.com/file/d/' . $file['id'] . '/preview',
                     'thumbnail_url' => $file['thumbnailLink'] ?? asset('assets/default.png'),
                     'icon_url' => $file['iconLink'] ?? null,
                     'mime_type' => $file['mimeType'],
+                    'extension' => $file['fullFileExtension'] ?? null,
                     'trashed' => $file['trashed'] ? TrashStatus::TRASHED : TrashStatus::NOT_TRASHED,
                     'created_at' => $file['createdTime'],
                     'updated_at' => $file['modifiedTime']
