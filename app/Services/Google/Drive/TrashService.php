@@ -2,6 +2,8 @@
 
 namespace App\Services\Google\Drive;
 
+use App\Enums\Drive\TrashedDate;
+use App\Enums\Drive\TrashedStatus;
 use App\Facades\Google\GoogleDriveFacade;
 use App\Repositories\File\FileRepositoryInterface;
 use Illuminate\Support\Facades\Log;
@@ -11,22 +13,35 @@ class TrashService
     public function __construct(
         private FileRepositoryInterface $fileRepo,
         private DashboardService $dashboardService
-    ) {
-    }
+    ) {}
 
     public function all()
     {
-        return $this->dashboardService->all(true);
+        $data = collect([
+            TrashedDate::TODAY->value => collect([]),
+            TrashedDate::YESTERDAY->value => collect([]),
+            TrashedDate::LONG_TIME_AGO->value => collect([])
+        ]);
+        foreach ($this->fileRepo->trashed() as $item) {
+            $key = match (true) {
+                $item->updated_at->isToday() => TrashedDate::TODAY->value,
+                $item->updated_at->isYesterday() => TrashedDate::YESTERDAY->value,
+                default => TrashedDate::LONG_TIME_AGO->value,
+            };
+            $data[$key]->push($item);
+        }
+        return $data;
     }
 
     public function trash($id)
     {
         try {
             GoogleDriveFacade::update($id, ['trashed' => true]);
-            if (!$this->dashboardService->sync()) {
-                return false;
-            }
-            return true;
+            $update = $this->fileRepo->update(
+                ['trashed' => TrashedStatus::TRASHED],
+                $this->fileRepo->findBy('drive_id', $id)->id
+            );
+            return blank($update) ? false : true;
         } catch (\Throwable $th) {
             Log::error($th);
             return false;

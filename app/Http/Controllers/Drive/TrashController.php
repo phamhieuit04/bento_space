@@ -8,13 +8,11 @@ use Illuminate\Http\Request;
 
 class TrashController extends Controller
 {
-    public function __construct(private TrashService $trashService)
-    {
-    }
+    public function __construct(private TrashService $trashService) {}
 
     public function index()
     {
-        return view('pages.drive.dashboard', [
+        return view('pages.drive.trash', [
             'data' => $this->trashService->all()
         ]);
     }
@@ -22,7 +20,7 @@ class TrashController extends Controller
     public function trash(Request $request, $id)
     {
         if ($this->trashService->trash($id)) {
-            return redirect()->back();
+            return redirect('/drive/dashboard');
         }
         throw new \Exception('Something went wrong...');
     }
