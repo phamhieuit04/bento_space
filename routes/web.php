@@ -29,6 +29,7 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('/{id}/download', [InfoController::class, 'download']);
                 Route::post('/{id}/rename', [InfoController::class, 'rename']);
                 Route::get('/{id}/trash', [TrashController::class, 'trash']);
+                Route::get('/{id}/restore', [TrashController::class, 'restore']);
             });
         });
         Route::prefix('trash')->group(function () {

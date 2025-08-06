@@ -33,12 +33,12 @@ class TrashService
         return $data;
     }
 
-    public function trash($id)
+    public function trash($id, bool $restore = false)
     {
         try {
             GoogleDriveFacade::update($id, ['trashed' => true]);
             $update = $this->fileRepo->update(
-                ['trashed' => TrashedStatus::TRASHED],
+                ['trashed' => !$restore ? TrashedStatus::TRASHED : TrashedStatus::NOT_TRASHED],
                 $this->fileRepo->findBy('drive_id', $id)->id
             );
             return blank($update) ? false : true;
@@ -46,5 +46,10 @@ class TrashService
             Log::error($th);
             return false;
         }
+    }
+
+    public function restore($id)
+    {
+        return $this->trash($id, true);
     }
 }

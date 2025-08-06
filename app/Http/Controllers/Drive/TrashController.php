@@ -24,4 +24,12 @@ class TrashController extends Controller
         }
         throw new \Exception('Something went wrong...');
     }
+
+    public function restore(Request $request, $id)
+    {
+        if ($this->trashService->restore($id)) {
+            return redirect()->back();
+        }
+        throw new \Exception('Something went wrong...');
+    }
 }

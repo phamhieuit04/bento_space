@@ -1,3 +1,4 @@
+@use('App\Enums\Drive\TrashedStatus')
 @include('modals.drive.rename')
 @include('modals.drive.trash')
 <flux:dropdown>
@@ -8,7 +9,7 @@
         class="cursor-pointer! rounded-full!"
     />
     <flux:menu class="max-w-52">
-        @if (request()->is('drive/dashboard') || request()->is('drive/dashboard/*'))
+        @if ($item['trashed'] == TrashedStatus::NOT_TRASHED->value)
             @if ($item['mime_type'] != 'application/vnd.google-apps.folder')
                 <flux:button
                     href="{{ url('/drive/dashboard/f/' . $item['drive_id'] . '/download') }}"
@@ -46,8 +47,15 @@
                 </flux:menu.item>
                 <flux:menu.item class="cursor-pointer!">
                     Size:
-                    {{ ! blank($item['size']) ? $item['size'] : 0 }}
+                    {{ $item['size'] }}
                 </flux:menu.item>
+                @if ($item['mime_type'] != 'application/vnd.google-apps.folder')
+                    <flux:menu.item class="cursor-pointer!">
+                        Extension:
+                        {{ $item['extension'] }}
+                    </flux:menu.item>
+                @endif
+
                 <flux:menu.item class="cursor-pointer!">
                     Type:
                     {{ $item['mime_type'] }}
@@ -61,10 +69,18 @@
                     {{ $item['updated_at'] }}
                 </flux:menu.item>
             </flux:menu.submenu>
-        @endif
-
-        @if (request()->is('drive/trash'))
-            <flux:menu.item>TODO: restore item</flux:menu.item>
+        @else
+            <flux:button
+                href="{{ url('/drive/dashboard/f/' . $item['drive_id'] . '/restore') }}"
+                variant="ghost"
+                class="flex w-full cursor-pointer items-center justify-start px-2.5!"
+            >
+                <iconify-icon
+                    icon="material-symbols-light:restore-page-rounded"
+                    class="text-lg"
+                ></iconify-icon>
+                Restore
+            </flux:button>
             <flux:menu.item>TODO: hard delete</flux:menu.item>
         @endif
     </flux:menu>
