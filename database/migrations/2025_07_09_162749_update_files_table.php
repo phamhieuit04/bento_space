@@ -18,11 +18,13 @@ return new class extends Migration {
             if (Schema::hasColumn('files', 'size')) {
                 $table->dropColumn('size');
             }
+            $table->text('download_url')->nullable();
             $table->text('video_url')->nullable();
             $table->text('thumbnail_url')->nullable();
             $table->text('icon_url')->nullable();
             $table->bigInteger('size')->nullable();
-            $table->text('mime_type')->nullable();
+            $table->string('mime_type')->nullable();
+            $table->string('extension')->nullable();
             $table->text('parents_id')->nullable();
             $table->boolean('trashed');
             $table->dropTimestamps();
