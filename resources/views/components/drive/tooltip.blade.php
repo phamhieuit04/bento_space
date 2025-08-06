@@ -31,17 +31,14 @@
                     Rename
                 </flux:button>
             </flux:modal.trigger>
-            <flux:modal.trigger
-                name="{{ 'trash_modal_' . $item['drive_id'] }}"
+            <flux:button
+                href="{{ url('/drive/dashboard/f/' . $item['drive_id'] . '/trash') }}"
+                icon="trash"
+                variant="ghost"
+                class="flex w-full cursor-pointer justify-start"
             >
-                <flux:button
-                    icon="trash"
-                    variant="ghost"
-                    class="flex w-full cursor-pointer justify-start"
-                >
-                    Trash
-                </flux:button>
-            </flux:modal.trigger>
+                Delete
+            </flux:button>
             <flux:menu.separator />
             <flux:menu.submenu heading="Information" icon="information-circle">
                 <flux:menu.item class="cursor-pointer!">
