@@ -16,11 +16,11 @@
                     >
                         @foreach ($data['folders'] as $folder)
                             <li
-                                class="group flex h-15 cursor-pointer items-center justify-between gap-2 overflow-hidden rounded-xl bg-[#f0f4f9] p-4 transition-all duration-200 hover:brightness-90 dark:bg-[#303032]"
+                                class="group flex cursor-pointer items-center justify-between gap-1 overflow-hidden rounded-xl bg-[#f0f4f9] pr-4 transition-all duration-200 hover:brightness-90 dark:bg-[#303032]"
                             >
                                 <a
                                     href="{{ url("/drive/dashboard/f/{$folder['drive_id']}") }}"
-                                    class="flex grow items-center gap-2 overflow-hidden"
+                                    class="flex h-15 grow items-center gap-2 overflow-hidden pl-4"
                                 >
                                     <iconify-icon
                                         icon="material-symbols:folder"
@@ -51,13 +51,14 @@
                     >
                         @foreach ($data['files'] as $file)
                             <li
-                                class="group h-64 cursor-pointer overflow-hidden rounded-xl bg-[#f0f4f9] p-4 transition-all duration-200 hover:brightness-90 dark:bg-[#303032]"
+                                class="group flex h-64 cursor-pointer flex-col overflow-hidden rounded-xl bg-[#f0f4f9] px-4 pt-2 pb-3 transition-all duration-200 hover:brightness-90 dark:bg-[#303032]"
                             >
                                 <div
-                                    class="mb-2 flex items-center justify-between gap-2"
+                                    class="mb-2 flex shrink-0 items-center justify-between gap-1"
                                 >
-                                    <div
-                                        class="flex items-center gap-2 overflow-hidden"
+                                    <a
+                                        href="{{ url('/drive/dashboard/f/' . $file['drive_id'] . '/info') }}"
+                                        class="flex grow items-center gap-2 overflow-hidden"
                                     >
                                         <img
                                             src="{{ $file['icon_url'] }}"
@@ -70,21 +71,19 @@
                                         >
                                             {{ $file['name'] }}
                                         </flux:text>
-                                    </div>
-                                    @include(
-                                    'components.drive.tooltip', ['item' => $file]                                    )
-                                </div>
-                                <div class="h-full pb-6.5">
-                                    <a
-                                        href="{{ url('/drive/dashboard/f/' . $file['drive_id'] . '/info') }}"
-                                    >
-                                        <img
-                                            src="{{ $file['thumbnail_url'] }}"
-                                            alt=""
-                                            class="h-full w-full rounded-md object-cover"
-                                        />
                                     </a>
+                                    @include('components.drive.tooltip', ['item' => $file])
                                 </div>
+                                <a
+                                    href="{{ url('/drive/dashboard/f/' . $file['drive_id'] . '/info') }}"
+                                    class="grow overflow-hidden"
+                                >
+                                    <img
+                                        src="{{ $file['thumbnail_url'] }}"
+                                        alt=""
+                                        class="h-full w-full rounded-md object-cover"
+                                    />
+                                </a>
                             </li>
                         @endforeach
                     </ul>
