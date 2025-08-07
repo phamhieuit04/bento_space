@@ -36,7 +36,7 @@ class TrashService
     public function trash($id, bool $restore = false)
     {
         try {
-            GoogleDriveFacade::update($id, ['trashed' => true]);
+            !$restore ? GoogleDriveFacade::delete($id) : GoogleDriveFacade::restore($id);
             $update = $this->fileRepo->update(
                 ['trashed' => !$restore ? TrashedStatus::TRASHED : TrashedStatus::NOT_TRASHED],
                 $this->fileRepo->findBy('drive_id', $id)->id
@@ -51,5 +51,18 @@ class TrashService
     public function restore($id)
     {
         return $this->trash($id, true);
+    }
+
+    public function delete($id)
+    {
+        try {
+            if (!GoogleDriveFacade::hardDelete($id)) {
+                return false;
+            }
+            return $this->fileRepo->delete($id) ? true : false;
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return false;
+        }
     }
 }

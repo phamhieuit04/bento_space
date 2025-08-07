@@ -32,4 +32,12 @@ class TrashController extends Controller
         }
         throw new \Exception('Something went wrong...');
     }
+
+    public function delete(Request $request, $id)
+    {
+        if ($this->trashService->delete($id)) {
+            return redirect()->back();
+        }
+        throw new \Exception('Something went wrong...');
+    }
 }

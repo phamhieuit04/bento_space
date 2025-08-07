@@ -77,11 +77,21 @@
             >
                 <iconify-icon
                     icon="material-symbols-light:restore-page-rounded"
-                    class="text-lg"
+                    class="text-xl"
                 ></iconify-icon>
                 Restore
             </flux:button>
-            <flux:menu.item>TODO: hard delete</flux:menu.item>
+            <flux:button
+                href="{{ url('/drive/dashboard/f/' . $item['drive_id'] . '/delete') }}"
+                variant="ghost"
+                class="flex w-full cursor-pointer items-center justify-start px-2.5!"
+            >
+                <iconify-icon
+                    icon="material-symbols-light:delete-forever"
+                    class="text-xl"
+                ></iconify-icon>
+                Delete forever
+            </flux:button>
         @endif
     </flux:menu>
 </flux:dropdown>
