@@ -30,6 +30,35 @@ class DashboardService
         return $data;
     }
 
+    public function create(string $name)
+    {
+        try {
+            $data = GoogleDriveFacade::createFolder($name);
+            $folder = GoogleDriveFacade::find($data['id']);
+            $this->fileRepo->create([
+                'drive_id' => $folder['id'],
+                'user_id' => Auth::id(),
+                'parents_id' => $folder['parents'] ?? null,
+                'name' => $folder['name'],
+                'size' => 0,
+                'download_url' => null,
+                'video_url' => null,
+                'thumbnail_url' => asset('assets/default.png'),
+                'icon_url' => $folder['iconLink'] ?? null,
+                'mime_type' => $folder['mimeType'],
+                'extension' => null,
+                'trashed' => TrashedStatus::NOT_TRASHED,
+                'created_at' => $folder['createdTime'],
+                'updated_at' => $folder['modifiedTime'],
+                'trashed_at' => null
+            ]);
+            return true;
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return false;
+        }
+    }
+
     public function upload(UploadedFile $file)
     {
         try {

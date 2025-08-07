@@ -20,6 +20,7 @@ Route::middleware(['auth'])->group(function () {
     Route::prefix('drive')->group(function () {
         Route::prefix('dashboard')->group(function () {
             Route::get('/', [DashboardController::class, 'index']);
+            Route::post('/create', [DashboardController::class, 'create']);
             Route::post('/upload', [DashboardController::class, 'upload']);
             Route::get('/sync', [DashboardController::class, 'sync']);
             Route::prefix('f')->group(function () {

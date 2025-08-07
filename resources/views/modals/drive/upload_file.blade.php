@@ -1,4 +1,4 @@
-<flux:modal name="upload_modal" class="w-96">
+<flux:modal name="upload_file_modal" class="w-96">
     <form
         action="{{ url('/drive/dashboard/upload') }}"
         method="post"

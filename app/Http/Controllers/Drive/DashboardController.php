@@ -8,15 +8,22 @@ use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
-    public function __construct(private DashboardService $dashboardService)
-    {
-    }
+    public function __construct(private DashboardService $dashboardService) {}
 
     public function index()
     {
         return view('pages.drive.dashboard', [
             'data' => $this->dashboardService->all()
         ]);
+    }
+
+    public function create(Request $request)
+    {
+        $name = $request->input('name');
+        if ($this->dashboardService->create($name)) {
+            return redirect()->back();
+        }
+        throw new \Exception('Something went wrong...');
     }
 
     public function upload(Request $request)

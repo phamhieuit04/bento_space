@@ -1,6 +1,7 @@
 @extends('layouts.master')
 @section('content')
-    @include('modals.drive.upload')
+    @include('modals.drive.upload_file')
+    @include('modals.drive.create_folder')
     <flux:main>
         @if (blank($data['folders']) && blank($data['files']))
             <h1 class="text-5xl font-bold">Không có gì ở đây hihi</h1>
@@ -85,16 +86,36 @@
         @endif
     </flux:main>
 
-    <flux:modal.trigger name="upload_modal">
+    <flux:dropdown>
         <flux:button
             square
-            class="fixed! right-0 bottom-0 m-5 cursor-pointer p-8"
             variant="primary"
+            class="fixed! right-0 bottom-0 m-5 cursor-pointer p-8"
         >
             <iconify-icon
                 icon="material-symbols:add-2-rounded"
                 class="text-2xl text-white"
             ></iconify-icon>
         </flux:button>
-    </flux:modal.trigger>
+        <flux:menu class="w-52">
+            <flux:modal.trigger name="create_folder_modal">
+                <flux:button
+                    icon="folder-plus"
+                    variant="ghost"
+                    class="flex w-full cursor-pointer justify-start"
+                >
+                    Create folder
+                </flux:button>
+            </flux:modal.trigger>
+            <flux:modal.trigger name="upload_file_modal">
+                <flux:button
+                    icon="arrow-up-tray"
+                    variant="ghost"
+                    class="flex w-full cursor-pointer justify-start"
+                >
+                    Upload file
+                </flux:button>
+            </flux:modal.trigger>
+        </flux:menu>
+    </flux:dropdown>
 @endsection
