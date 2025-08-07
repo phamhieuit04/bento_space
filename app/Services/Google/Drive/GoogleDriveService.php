@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Http;
 class GoogleDriveService
 {
     const SERVICE_ENDPOINT = 'https://www.googleapis.com/drive/v3';
-    const UPLOAD_FILE_URL = 'https://www.googleapis.com/upload/drive/v3';
+    const UPLOAD_SERVICE_ENDPOINT = 'https://www.googleapis.com/upload/drive/v3';
     private $token;
     private $fields;
 
@@ -74,7 +74,7 @@ class GoogleDriveService
             'Content-Length' => $file->getSize()
         ])->withBody($file->getContent(), $file->getClientMimeType())
             ->withQueryParameters(['fields' => $this->fields])
-            ->post(self::UPLOAD_FILE_URL . '/files', ['uploadType' => 'media']);
+            ->post(self::UPLOAD_SERVICE_ENDPOINT . '/files', ['uploadType' => 'media']);
         if ($response->failed()) {
             throw new GoogleException($response);
         }
@@ -109,6 +109,18 @@ class GoogleDriveService
             throw new GoogleException($response);
         }
         return true;
+    }
+
+    public function createFolder(string $name)
+    {
+        $response = Http::withToken($this->token)->post(self::SERVICE_ENDPOINT . "/files", [
+            'name' => $name,
+            'mimeType' => 'application/vnd.google-apps.folder'
+        ]);
+        if ($response->failed()) {
+            throw new \Exception($response);
+        }
+        return $response->collect();
     }
 
     public function getRootId()
