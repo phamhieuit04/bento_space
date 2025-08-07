@@ -16,6 +16,8 @@ interface BaseRepositoryInterface
 
     public function update(array $attributes, $id);
 
+    public function delete($id);
+
     public function firstOrCreate(array $attributes, array $values);
 
     public function updateOrCreate(array $attributes, array $values);

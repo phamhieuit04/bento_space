@@ -6,9 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class BaseRepository implements BaseRepositoryInterface
 {
-    public function __construct(protected Model $model)
-    {
-    }
+    public function __construct(protected Model $model) {}
 
     public function all()
     {
@@ -40,6 +38,12 @@ class BaseRepository implements BaseRepositoryInterface
         $model = $this->model->find($id);
         $update = $model->update($attribute);
         return $update ? $this->model->find($id) : null;
+    }
+
+    public function delete($id)
+    {
+        $delete = $this->model->where('drive_id', $id)->delete();
+        return $delete ? true : false;
     }
 
     public function firstOrCreate(array $attributes, array $values)
