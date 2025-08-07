@@ -1,4 +1,8 @@
-<flux:sidebar sticky stashable class="w-96">
+<flux:sidebar
+    sticky
+    stashable
+    class="h-screen bg-zinc-50 xl:w-72 2xl:w-80 dark:bg-zinc-900"
+>
     <flux:navlist class="w-full gap-1">
         <flux:navlist.group heading="Google Drive" expandable>
             <flux:navlist.item

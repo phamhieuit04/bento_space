@@ -12,7 +12,7 @@
                     My folders
                 </flux:heading>
                 <ul
-                    class="mb-8 grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5"
+                    class="mb-8 grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
                 >
                     @foreach ($data['folders'] as $folder)
                         <li
@@ -42,11 +42,11 @@
                     My files
                 </flux:heading>
                 <ul
-                    class="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5"
+                    class="grid gap-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
                 >
                     @foreach ($data['files'] as $file)
                         <li
-                            class="group flex h-64 cursor-pointer flex-col overflow-hidden rounded-xl bg-[#f0f4f9] px-4 pt-2 pb-3 transition-all duration-200 hover:brightness-90 dark:bg-[#303032]"
+                            class="group flex cursor-pointer flex-col overflow-hidden rounded-xl bg-[#f0f4f9] px-4 pt-2 pb-3 transition-all duration-200 hover:brightness-90 xl:h-58 2xl:h-68 dark:bg-[#303032]"
                         >
                             <div
                                 class="mb-2 flex shrink-0 items-center justify-between gap-1"
