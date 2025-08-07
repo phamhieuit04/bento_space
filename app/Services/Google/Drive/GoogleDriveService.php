@@ -91,6 +91,26 @@ class GoogleDriveService
         return $response->body();
     }
 
+    public function restore($id)
+    {
+        return $this->update($id, ['trashed' => false]);
+    }
+
+    public function delete($id)
+    {
+        return $this->update($id, ['trashed' => true]);
+    }
+
+    public function hardDelete($id)
+    {
+        $response = Http::withToken($this->token)
+            ->delete(self::SERVICE_ENDPOINT . "/files/$id");
+        if ($response->failed()) {
+            throw new GoogleException($response);
+        }
+        return true;
+    }
+
     public function getRootId()
     {
         $response = Http::withToken($this->token)
