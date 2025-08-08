@@ -21,4 +21,6 @@ interface BaseRepositoryInterface
     public function firstOrCreate(array $attributes, array $values);
 
     public function updateOrCreate(array $attributes, array $values);
+
+    public function search(string $column, $value);
 }

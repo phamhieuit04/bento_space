@@ -7,8 +7,8 @@ use App\Repositories\Base\BaseRepository;
 
 class UserRepository extends BaseRepository implements UserRepositoryInterface
 {
-    public function __construct(User $user)
+    protected function getModel()
     {
-        parent::__construct($user);
+        return User::class;
     }
 }

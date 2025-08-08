@@ -9,22 +9,29 @@ use Illuminate\Support\Facades\Auth;
 
 class FileRepository extends BaseRepository implements FileRepositoryInterface
 {
-    public function __construct(private File $file)
+    protected function getModel()
     {
-        parent::__construct($file);
+        return File::class;
     }
 
     public function all()
     {
-        return $this->file->where('user_id', Auth::id())
+        return $this->model->where('user_id', Auth::id())
             ->where('trashed', TrashedStatus::NOT_TRASHED->value)
             ->orderBy('updated_at', 'desc')->get();
     }
 
     public function trashed()
     {
-        return $this->file->where('user_id', Auth::id())
+        return $this->model->where('user_id', Auth::id())
             ->where('trashed', TrashedStatus::TRASHED->value)
             ->orderBy('updated_at', 'desc')->get();
+    }
+
+    public function search(string $column, $value)
+    {
+        $collection = $this->model->where($column, 'like', "%$value%")
+            ->where('trashed', TrashedStatus::NOT_TRASHED->value)->get();
+        return $collection;
     }
 }

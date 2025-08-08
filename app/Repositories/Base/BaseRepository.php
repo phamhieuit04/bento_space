@@ -2,11 +2,21 @@
 
 namespace App\Repositories\Base;
 
-use Illuminate\Database\Eloquent\Model;
-
-class BaseRepository implements BaseRepositoryInterface
+abstract class BaseRepository implements BaseRepositoryInterface
 {
-    public function __construct(protected Model $model) {}
+    protected $model;
+
+    public function __construct()
+    {
+        $this->setModel();
+    }
+
+    abstract protected function getModel();
+
+    protected function setModel()
+    {
+        $this->model = app()->make($this->getModel());
+    }
 
     public function all()
     {
@@ -58,5 +68,11 @@ class BaseRepository implements BaseRepositoryInterface
         return !blank($model) ?
             self::update($values, $model->id) :
             self::create($values);
+    }
+
+    public function search(string $column, $value)
+    {
+        $collection = $this->model->where($column, 'like', "%$value%")->get();
+        return $collection;
     }
 }
