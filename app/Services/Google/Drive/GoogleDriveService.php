@@ -111,6 +111,16 @@ class GoogleDriveService
         return true;
     }
 
+    public function emptyTrash()
+    {
+        $response = Http::withToken($this->token)
+            ->delete(self::SERVICE_ENDPOINT . '/files/trash');
+        if ($response->failed()) {
+            throw new GoogleException($response);
+        }
+        return true;
+    }
+
     public function createFolder(string $name)
     {
         $response = Http::withToken($this->token)->post(self::SERVICE_ENDPOINT . "/files", [
