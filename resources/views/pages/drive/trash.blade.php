@@ -1,9 +1,25 @@
+@use('App\Enums\Drive\TrashedDate')
 @extends('layouts.master')
 @section('content')
     <flux:main>
-        @if (blank($data))
+        @if (blank($data[TrashedDate::TODAY->value]) && blank($data[TrashedDate::YESTERDAY->value]) && blank($data[TrashedDate::LONG_TIME_AGO->value]))
             <h1 class="text-5xl font-bold">Không có gì ở đây hihi</h1>
         @else
+            <div
+                class="mb-5 flex items-center justify-between rounded-lg bg-[#f0f4f9] px-4 py-3.5 dark:bg-[#303032]"
+            >
+                <flux:heading size="lg">
+                    Items in the trash will be permanently deleted after 30
+                    days.
+                </flux:heading>
+                <flux:button
+                    variant="danger"
+                    class="cursor-pointer"
+                    href="{{ url('/drive/trash/empty') }}"
+                >
+                    Empty all
+                </flux:button>
+            </div>
             @for ($i = 0; $i < $data->count(); $i++)
                 @if ($data[$data->keys()[$i]]->count() > 0)
                     <flux:heading size="xl" level="1" class="mb-2 font-bold!">
