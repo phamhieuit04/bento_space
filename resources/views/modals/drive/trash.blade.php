@@ -7,13 +7,13 @@
             <flux:heading size="lg">Delete {{ $item['name'] }}</flux:heading>
             <flux:text class="mt-2">
                 <p>You're about to delete this file/folder.</p>
-                <p>This file/folder will be moved to trash.</p>
+                <p>This file/folder will be deleted forever.</p>
             </flux:text>
         </div>
         <form
             class="flex gap-2"
-            method="post"
-            action="{{ url("/drive/dashboard/f/{$item['drive_id']}/trash") }}"
+            method="get"
+            action="{{ url("/drive/dashboard/f/{$item['drive_id']}/delete") }}"
         >
             @csrf
             <flux:spacer />

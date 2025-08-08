@@ -81,17 +81,20 @@
                 ></iconify-icon>
                 Restore
             </flux:button>
-            <flux:button
-                href="{{ url('/drive/dashboard/f/' . $item['drive_id'] . '/delete') }}"
-                variant="ghost"
-                class="flex w-full cursor-pointer items-center justify-start px-2.5!"
+            <flux:modal.trigger
+                name="{{ 'trash_modal_' . $item['drive_id'] }}"
             >
-                <iconify-icon
-                    icon="material-symbols-light:delete-forever"
-                    class="text-xl"
-                ></iconify-icon>
-                Delete forever
-            </flux:button>
+                <flux:button
+                    variant="ghost"
+                    class="flex w-full cursor-pointer items-center justify-start px-2.5!"
+                >
+                    <iconify-icon
+                        icon="material-symbols-light:delete-forever"
+                        class="text-xl"
+                    ></iconify-icon>
+                    Delete forever
+                </flux:button>
+            </flux:modal.trigger>
         @endif
     </flux:menu>
 </flux:dropdown>
