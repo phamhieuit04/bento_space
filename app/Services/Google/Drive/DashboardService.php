@@ -92,8 +92,7 @@ class DashboardService
                     'extension' => $file['fullFileExtension'] ?? null,
                     'trashed' => $file['trashed'] ? TrashedStatus::TRASHED : TrashedStatus::NOT_TRASHED,
                     'created_at' => $file['createdTime'],
-                    'updated_at' => $file['modifiedTime'],
-                    'trashed_at' => $file['trashedTime'] ?? null
+                    'updated_at' => $file['modifiedTime']
                 ]);
             }
             return true;
@@ -125,11 +124,10 @@ class DashboardService
             'files' => collect([]),
             'folders' => collect([])
         ]);
-        foreach (GoogleDriveFacade::search($name) as $item) {
-            $file = $this->fileRepo->findBy('drive_id', $item['id']);
-            $file->mime_type == 'application/vnd.google-apps.folder'
-                ? $data['folders']->push($file)
-                : $data['files']->push($file);
+        foreach ($this->fileRepo->search('name', $name) as $item) {
+            $item->mime_type == 'application/vnd.google-apps.folder'
+                ? $data['folders']->push($item)
+                : $data['files']->push($item);
         }
         return $data;
     }
