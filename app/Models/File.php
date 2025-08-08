@@ -27,6 +27,8 @@ class File extends Model
         'updated_at'
     ];
 
+    public $timestamps = false;
+
     protected function casts()
     {
         return [
