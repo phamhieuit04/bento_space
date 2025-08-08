@@ -1,3 +1,4 @@
+@use('App\Enums\Drive\StarredStatus')
 @extends('layouts.master')
 @section('content')
     @include('modals.drive.upload_file')
@@ -16,7 +17,7 @@
                 >
                     @foreach ($data['folders'] as $folder)
                         <li
-                            class="group flex cursor-pointer items-center justify-between gap-1 overflow-hidden rounded-xl bg-[#f0f4f9] pr-4 transition-all duration-200 hover:brightness-90 dark:bg-[#303032]"
+                            class="group flex cursor-pointer items-center justify-between gap-1.5 overflow-hidden rounded-xl bg-[#f0f4f9] pr-4 transition-all duration-200 hover:brightness-90 dark:bg-[#303032]"
                         >
                             <a
                                 href="{{ url("/drive/dashboard/f/{$folder['drive_id']}") }}"
@@ -30,7 +31,16 @@
                                     {{ $folder['name'] }}
                                 </flux:text>
                             </a>
-                            @include('components.drive.tooltip', ['item' => $folder])
+                            <div class="flex items-center gap-0.5">
+                                @if ($folder['starred'] == StarredStatus::STARRED->value)
+                                    <iconify-icon
+                                        icon="material-symbols-light:kid-star"
+                                        class="text-xl text-red-500"
+                                    ></iconify-icon>
+                                @endif
+
+                                @include('components.drive.tooltip', ['item' => $folder])
+                            </div>
                         </li>
                     @endforeach
                 </ul>
@@ -49,7 +59,7 @@
                             class="group flex cursor-pointer flex-col overflow-hidden rounded-xl bg-[#f0f4f9] px-4 pt-2 pb-3 transition-all duration-200 hover:brightness-90 xl:h-58 2xl:h-68 dark:bg-[#303032]"
                         >
                             <div
-                                class="mb-2 flex shrink-0 items-center justify-between gap-1"
+                                class="mb-2 flex shrink-0 items-center justify-between gap-1.5"
                             >
                                 <a
                                     href="{{ url('/drive/dashboard/f/' . $file['drive_id'] . '/info') }}"
@@ -67,7 +77,16 @@
                                         {{ $file['name'] }}
                                     </flux:text>
                                 </a>
-                                @include('components.drive.tooltip', ['item' => $file])
+                                <div class="flex items-center gap-0.5">
+                                    @if ($file['starred'] == StarredStatus::STARRED->value)
+                                        <iconify-icon
+                                            icon="material-symbols-light:kid-star"
+                                            class="text-xl text-red-500"
+                                        ></iconify-icon>
+                                    @endif
+
+                                    @include('components.drive.tooltip', ['item' => $file])
+                                </div>
                             </div>
                             <a
                                 href="{{ url('/drive/dashboard/f/' . $file['drive_id'] . '/info') }}"

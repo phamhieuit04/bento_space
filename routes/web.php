@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Drive\DashboardController;
 use App\Http\Controllers\Drive\InfoController;
+use App\Http\Controllers\Drive\StarController;
 use App\Http\Controllers\Drive\TrashController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +19,7 @@ Route::prefix('google')->group(function () {
 
 Route::middleware(['auth'])->group(function () {
     Route::prefix('drive')->group(function () {
+        Route::post('/search', [DashboardController::class, 'search']);
         Route::prefix('dashboard')->group(function () {
             Route::get('/', [DashboardController::class, 'index']);
             Route::post('/create', [DashboardController::class, 'create']);
@@ -32,13 +34,17 @@ Route::middleware(['auth'])->group(function () {
                 Route::get('/{id}/trash', [TrashController::class, 'trash']);
                 Route::get('/{id}/delete', [TrashController::class, 'delete']);
                 Route::get('/{id}/restore', [TrashController::class, 'restore']);
+                Route::get('/{id}/star', [DashboardController::class, 'star']);
+                Route::get('/{id}/unstar', [DashboardController::class, 'unstar']);
             });
         });
         Route::prefix('trash')->group(function () {
             Route::get('/', [TrashController::class, 'index']);
             Route::get('/empty', [TrashController::class, 'empty']);
         });
-        Route::post('/search', [DashboardController::class, 'search']);
+        Route::prefix('starred')->group(function () {
+            Route::get('/', [StarController::class, 'index']);
+        });
     });
 
     Route::get('/logout', [AuthController::class, 'logout']);

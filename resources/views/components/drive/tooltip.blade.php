@@ -1,4 +1,5 @@
 @use('App\Enums\Drive\TrashedStatus')
+@use('App\Enums\Drive\StarredStatus')
 @include('modals.drive.rename')
 @include('modals.drive.trash')
 <flux:dropdown>
@@ -10,13 +11,42 @@
     />
     <flux:menu class="max-w-52">
         @if ($item['trashed'] == TrashedStatus::NOT_TRASHED->value)
+            @if ($item['starred'] == StarredStatus::NOT_STARRED->value)
+                <flux:button
+                    href="{{ url('/drive/dashboard/f/' . $item['drive_id'] . '/star') }}"
+                    variant="ghost"
+                    class="flex w-full cursor-pointer items-center justify-start px-2.5!"
+                >
+                    <iconify-icon
+                        icon="material-symbols-light:kid-star-outline"
+                        class="text-xl"
+                    ></iconify-icon>
+                    Add star
+                </flux:button>
+            @else
+                <flux:button
+                    href="{{ url('/drive/dashboard/f/' . $item['drive_id'] . '/unstar') }}"
+                    variant="ghost"
+                    class="flex w-full cursor-pointer items-center justify-start px-2.5!"
+                >
+                    <iconify-icon
+                        icon="material-symbols-light:kid-star"
+                        class="text-xl"
+                    ></iconify-icon>
+                    Remove star
+                </flux:button>
+            @endif
+
             @if ($item['mime_type'] != 'application/vnd.google-apps.folder')
                 <flux:button
                     href="{{ url('/drive/dashboard/f/' . $item['drive_id'] . '/download') }}"
-                    icon="arrow-down-tray"
                     variant="ghost"
-                    class="flex w-full cursor-pointer justify-start"
+                    class="flex w-full cursor-pointer items-center justify-start px-2.5!"
                 >
+                    <iconify-icon
+                        icon="material-symbols:download-2-rounded"
+                        class="text-xl"
+                    ></iconify-icon>
                     Download
                 </flux:button>
             @endif
@@ -25,19 +55,25 @@
                 name="{{ 'rename_modal_' . $item['drive_id'] }}"
             >
                 <flux:button
-                    icon="pencil-square"
                     variant="ghost"
-                    class="flex w-full cursor-pointer justify-start"
+                    class="flex w-full cursor-pointer items-center justify-start px-2.5!"
                 >
+                    <iconify-icon
+                        icon="material-symbols-light:edit-square"
+                        class="text-xl"
+                    ></iconify-icon>
                     Rename
                 </flux:button>
             </flux:modal.trigger>
             <flux:button
                 href="{{ url('/drive/dashboard/f/' . $item['drive_id'] . '/trash') }}"
-                icon="trash"
                 variant="ghost"
-                class="flex w-full cursor-pointer justify-start"
+                class="flex w-full cursor-pointer items-center justify-start px-2.5!"
             >
+                <iconify-icon
+                    icon="material-symbols:delete"
+                    class="text-xl"
+                ></iconify-icon>
                 Delete
             </flux:button>
             <flux:menu.separator />

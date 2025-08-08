@@ -8,16 +8,24 @@
             <flux:navlist.item
                 icon="folder"
                 icon:variant="solid"
-                class="my-2! h-12!"
+                class="mb-1 h-12!"
                 href="{{ url('/drive/dashboard') }}"
             >
                 Dashboard
             </flux:navlist.item>
             <flux:navlist.item
+                href="{{ url('/drive/starred') }}"
+                icon="star"
+                icon:variant="solid"
+                class="mb-1 h-12!"
+            >
+                Starred
+            </flux:navlist.item>
+            <flux:navlist.item
                 href="{{ url('/drive/trash') }}"
                 icon="trash"
                 icon:variant="solid"
-                class="my-2! h-12!"
+                class="mb-1 h-12!"
             >
                 Trash bin
             </flux:navlist.item>

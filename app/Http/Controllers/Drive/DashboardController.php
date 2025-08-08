@@ -60,4 +60,20 @@ class DashboardController extends Controller
             'data' => $this->dashboardService->search($searchKey)
         ]);
     }
+
+    public function star(Request $request, $id)
+    {
+        if ($this->dashboardService->star($id)) {
+            return redirect()->back();
+        }
+        throw new \Exception('Something went wrong...');
+    }
+
+    public function unstar(Request $request, $id)
+    {
+        if ($this->dashboardService->unstar($id)) {
+            return redirect()->back();
+        }
+        throw new \Exception('Something went wrong...');
+    }
 }

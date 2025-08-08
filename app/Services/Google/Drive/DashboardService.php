@@ -2,6 +2,7 @@
 
 namespace App\Services\Google\Drive;
 
+use App\Enums\Drive\StarredStatus;
 use App\Enums\Drive\TrashedStatus;
 use App\Facades\Google\GoogleDriveFacade;
 use App\Repositories\File\FileRepositoryInterface;
@@ -90,6 +91,7 @@ class DashboardService
                     'icon_url' => $file['iconLink'] ?? null,
                     'mime_type' => $file['mimeType'],
                     'extension' => $file['fullFileExtension'] ?? null,
+                    'starred' => $file['starred'] ? StarredStatus::STARRED : StarredStatus::NOT_STARRED,
                     'trashed' => $file['trashed'] ? TrashedStatus::TRASHED : TrashedStatus::NOT_TRASHED,
                     'created_at' => $file['createdTime'],
                     'updated_at' => $file['modifiedTime']
@@ -130,5 +132,29 @@ class DashboardService
                 : $data['files']->push($item);
         }
         return $data;
+    }
+
+    public function star($id, bool $unstar = false)
+    {
+        try {
+            $file = $this->fileRepo->findBy('drive_id', $id);
+            !$unstar ? GoogleDriveFacade::star($id) : GoogleDriveFacade::unstar($id);
+            $update = $this->fileRepo->update(
+                [
+                    'starred' => !$unstar ? StarredStatus::STARRED : StarredStatus::NOT_STARRED,
+                    'updated_at' => now()
+                ],
+                $file->id
+            );
+            return blank($update) ? false : true;
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return false;
+        }
+    }
+
+    public function unstar($id)
+    {
+        return $this->star($id, true);
     }
 }
