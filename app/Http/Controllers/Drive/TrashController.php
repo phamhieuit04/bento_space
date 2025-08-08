@@ -20,7 +20,7 @@ class TrashController extends Controller
     public function trash(Request $request, $id)
     {
         if ($this->trashService->trash($id)) {
-            return redirect('/drive/dashboard');
+            return redirect()->back();
         }
         throw new \Exception('Something went wrong...');
     }
