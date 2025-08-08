@@ -35,21 +35,21 @@ class BaseRepository implements BaseRepositoryInterface
 
     public function update(array $attribute, $id)
     {
-        $model = $this->model->find($id);
+        $model = self::find($id);
         $update = $model->update($attribute);
         return $update ? $this->model->find($id) : null;
     }
 
     public function delete($id)
     {
-        $delete = $this->model->where('drive_id', $id)->delete();
+        $delete = self::find($id)->delete();
         return $delete ? true : false;
     }
 
     public function firstOrCreate(array $attributes, array $values)
     {
-        $model = $this->findWhere($attributes);
-        return blank($model) ? $this->create($values) : $model;
+        $model = self::findWhere($attributes);
+        return blank($model) ? self::create($values) : $model;
     }
 
     public function updateOrCreate(array $attributes, array $values)
