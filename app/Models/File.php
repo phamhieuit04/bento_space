@@ -22,6 +22,7 @@ class File extends Model
         'mime_type',
         'extension',
         'parents_id',
+        'starred',
         'trashed',
         'created_at',
         'updated_at'

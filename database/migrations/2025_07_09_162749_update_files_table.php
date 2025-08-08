@@ -26,6 +26,7 @@ return new class extends Migration {
             $table->string('mime_type')->nullable();
             $table->string('extension')->nullable();
             $table->text('parents_id')->nullable();
+            $table->boolean('starred');
             $table->boolean('trashed');
             $table->dropTimestamps();
             $table->timestamps();

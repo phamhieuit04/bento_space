@@ -2,6 +2,7 @@
 
 namespace App\Repositories\File;
 
+use App\Enums\Drive\StarredStatus;
 use App\Enums\Drive\TrashedStatus;
 use App\Models\File;
 use App\Repositories\Base\BaseRepository;
@@ -17,6 +18,14 @@ class FileRepository extends BaseRepository implements FileRepositoryInterface
     public function all()
     {
         return $this->model->where('user_id', Auth::id())
+            ->where('trashed', TrashedStatus::NOT_TRASHED->value)
+            ->orderBy('created_at', 'desc')->get();
+    }
+
+    public function starred()
+    {
+        return $this->model->where('user_id', Auth::id())
+            ->where('starred', StarredStatus::STARRED->value)
             ->where('trashed', TrashedStatus::NOT_TRASHED->value)
             ->orderBy('updated_at', 'desc')->get();
     }
