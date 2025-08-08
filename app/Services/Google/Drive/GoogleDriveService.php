@@ -17,7 +17,7 @@ class GoogleDriveService
     public function __construct()
     {
         $this->token = Auth::user()->access_token;
-        $this->fields = 'id,name,fullFileExtension,webContentLink,mimeType,size,thumbnailLink,iconLink,parents,trashed,createdTime,modifiedTime';
+        $this->fields = 'id,name,fullFileExtension,webContentLink,mimeType,size,thumbnailLink,iconLink,parents,starred,trashed,createdTime,modifiedTime';
     }
 
     public function all()
@@ -89,6 +89,16 @@ class GoogleDriveService
             throw new GoogleException($response);
         }
         return $response->body();
+    }
+
+    public function star($id)
+    {
+        return $this->update($id, ['starred' => true]);
+    }
+
+    public function unstar($id)
+    {
+        return $this->update($id, ['starred' => false]);
     }
 
     public function restore($id)
