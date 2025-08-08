@@ -36,6 +36,7 @@ Route::middleware(['auth'])->group(function () {
         });
         Route::prefix('trash')->group(function () {
             Route::get('/', [TrashController::class, 'index']);
+            Route::get('/empty', [TrashController::class, 'empty']);
         });
         Route::post('/search', [DashboardController::class, 'search']);
     });

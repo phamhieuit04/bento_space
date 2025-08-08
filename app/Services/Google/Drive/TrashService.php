@@ -36,10 +36,14 @@ class TrashService
     public function trash($id, bool $restore = false)
     {
         try {
+            $file = $this->fileRepo->findBy('drive_id', $id);
             !$restore ? GoogleDriveFacade::delete($id) : GoogleDriveFacade::restore($id);
             $update = $this->fileRepo->update(
-                ['trashed' => !$restore ? TrashedStatus::TRASHED : TrashedStatus::NOT_TRASHED],
-                $this->fileRepo->findBy('drive_id', $id)->id
+                [
+                    'trashed' => !$restore ? TrashedStatus::TRASHED : TrashedStatus::NOT_TRASHED,
+                    'updated_at' => now()
+                ],
+                $file->id
             );
             return blank($update) ? false : true;
         } catch (\Throwable $th) {
@@ -59,7 +63,24 @@ class TrashService
             if (!GoogleDriveFacade::hardDelete($id)) {
                 return false;
             }
-            return $this->fileRepo->delete($id) ? true : false;
+            $file = $this->fileRepo->findBy('drive_id', $id);
+            return $this->fileRepo->delete($file['id']) ? true : false;
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return false;
+        }
+    }
+
+    public function empty()
+    {
+        try {
+            if (!GoogleDriveFacade::emptyTrash()) {
+                return false;
+            }
+            foreach ($this->fileRepo->trashed() as $item) {
+                $this->fileRepo->delete($item['id']);
+            }
+            return true;
         } catch (\Throwable $th) {
             Log::error($th);
             return false;

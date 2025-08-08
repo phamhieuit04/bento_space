@@ -40,4 +40,12 @@ class TrashController extends Controller
         }
         throw new \Exception('Something went wrong...');
     }
+
+    public function empty()
+    {
+        if ($this->trashService->empty()) {
+            return redirect('/drive/trash');
+        }
+        throw new \Exception('Something went wrong...');
+    }
 }
