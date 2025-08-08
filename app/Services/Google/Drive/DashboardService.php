@@ -42,16 +42,12 @@ class DashboardService
                 'parents_id' => $folder['parents'] ?? null,
                 'name' => $folder['name'],
                 'size' => 0,
-                'download_url' => null,
-                'video_url' => null,
                 'thumbnail_url' => asset('assets/default.png'),
                 'icon_url' => $folder['iconLink'] ?? null,
                 'mime_type' => $folder['mimeType'],
-                'extension' => null,
                 'trashed' => TrashedStatus::NOT_TRASHED,
                 'created_at' => $folder['createdTime'],
                 'updated_at' => $folder['modifiedTime'],
-                'trashed_at' => null
             ]);
             return true;
         } catch (\Throwable $th) {
@@ -86,7 +82,7 @@ class DashboardService
                     'name' => $file['name'],
                     'size' => $file['size'] ?? 0,
                     'download_url' => $file['webContentLink'] ?? null,
-                    'video_url' => 'https://drive.google.com/file/d/' . $file['id'] . '/preview',
+                    'preview_url' => $file['mimeType'] == 'video/mp4' ? "https://drive.google.com/file/d/{$file['id']}/preview" : null,
                     'thumbnail_url' => $file['thumbnailLink'] ?? asset('assets/default.png'),
                     'icon_url' => $file['iconLink'] ?? null,
                     'mime_type' => $file['mimeType'],

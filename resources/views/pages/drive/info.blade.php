@@ -20,7 +20,7 @@
 
                 @if ($file['mime_type'] == 'video/mp4')
                     <iframe
-                        src="{{ $file['video_url'] }}"
+                        src="{{ $file['preview_url'] }}"
                         height="700"
                         width="1490"
                     ></iframe>

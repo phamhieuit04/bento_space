@@ -18,8 +18,11 @@ return new class extends Migration {
             if (Schema::hasColumn('files', 'size')) {
                 $table->dropColumn('size');
             }
+            if (Schema::hasColumn('files', 'video_url')) {
+                $table->dropColumn('video_url');
+            }
             $table->text('download_url')->nullable();
-            $table->text('video_url')->nullable();
+            $table->text('preview_url')->nullable();
             $table->text('thumbnail_url')->nullable();
             $table->text('icon_url')->nullable();
             $table->bigInteger('size')->nullable();

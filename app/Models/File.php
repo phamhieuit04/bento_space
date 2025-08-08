@@ -16,7 +16,7 @@ class File extends Model
         'name',
         'size',
         'download_url',
-        'video_url',
+        'preview_url',
         'thumbnail_url',
         'icon_url',
         'mime_type',
