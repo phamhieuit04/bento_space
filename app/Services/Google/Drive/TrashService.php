@@ -13,7 +13,8 @@ class TrashService
     public function __construct(
         private FileRepositoryInterface $fileRepo,
         private DashboardService $dashboardService
-    ) {}
+    ) {
+    }
 
     public function all()
     {
@@ -22,7 +23,7 @@ class TrashService
             TrashedDate::YESTERDAY->value => collect([]),
             TrashedDate::LONG_TIME_AGO->value => collect([])
         ]);
-        foreach ($this->fileRepo->filter('trashed') as $item) {
+        foreach ($this->fileRepo->filter('trashed', ['updated_at', 'desc']) as $item) {
             $key = match (true) {
                 $item->updated_at->isToday() => TrashedDate::TODAY->value,
                 $item->updated_at->isYesterday() => TrashedDate::YESTERDAY->value,
@@ -77,7 +78,7 @@ class TrashService
             if (!GoogleDriveFacade::emptyTrash()) {
                 return false;
             }
-            foreach ($this->fileRepo->filter('trashed') as $item) {
+            foreach ($this->fileRepo->filter('trashed', ['updated_at', 'desc']) as $item) {
                 $this->fileRepo->delete($item['id']);
             }
             return true;
