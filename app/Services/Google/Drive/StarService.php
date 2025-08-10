@@ -14,7 +14,7 @@ class StarService
             'folders' => collect([]),
             'files' => collect([])
         ]);
-        foreach ($this->fileRepo->starred() as $item) {
+        foreach ($this->fileRepo->filter('starred') as $item) {
             $item->mime_type == 'application/vnd.google-apps.folder' ?
                 $data['folders']->push($item) :
                 $data['files']->push($item);
