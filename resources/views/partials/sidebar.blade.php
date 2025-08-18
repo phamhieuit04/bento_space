@@ -38,5 +38,13 @@
         >
             Google Task
         </flux:navlist.item>
+        <flux:navlist.item
+            icon="document-text"
+            icon:variant="solid"
+            href=""
+            class="h-12!"
+        >
+            Google Keep
+        </flux:navlist.item>
     </flux:navlist>
 </flux:sidebar>
