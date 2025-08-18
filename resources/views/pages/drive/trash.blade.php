@@ -30,7 +30,7 @@
                     >
                         @foreach ($data[$data->keys()[$i]] as $item)
                             <li
-                                class="group flex h-64 cursor-pointer flex-col overflow-hidden rounded-xl bg-[#f0f4f9] px-4 pt-2 pb-3 transition-all duration-200 hover:brightness-90 dark:bg-[#303032]"
+                                class="group flex h-64 flex-col overflow-hidden rounded-xl bg-[#f0f4f9] px-4 pt-2 pb-3 dark:bg-[#303032]"
                             >
                                 <div
                                     class="mb-2 flex shrink-0 items-center justify-between gap-1"
