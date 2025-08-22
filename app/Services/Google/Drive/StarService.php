@@ -6,21 +6,20 @@ use App\Repositories\File\FileRepositoryInterface;
 
 class StarService
 {
-    public function __construct(private FileRepositoryInterface $fileRepo)
-    {
-    }
+    public function __construct(private FileRepositoryInterface $fileRepo) {}
 
     public function all()
     {
         $data = collect([
             'folders' => collect([]),
-            'files' => collect([])
+            'files'   => collect([])
         ]);
         foreach ($this->fileRepo->filter('starred', ['updated_at', 'desc']) as $item) {
             $item->mime_type == 'application/vnd.google-apps.folder' ?
                 $data['folders']->push($item) :
                 $data['files']->push($item);
         }
+
         return $data;
     }
 }

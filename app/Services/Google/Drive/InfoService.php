@@ -13,6 +13,7 @@ class InfoService
     public function show($id)
     {
         $file = $this->fileRepo->findBy('drive_id', $id);
+
         return $file;
     }
 
@@ -20,6 +21,7 @@ class InfoService
     {
         $mime = $this->fileRepo->findBy('drive_id', $id)->mime_type;
         $content = GoogleDriveFacade::stream($id);
+
         return response($content)
             ->header('Content-Type', $mime);
     }
@@ -27,6 +29,7 @@ class InfoService
     public function download($id)
     {
         $file = $this->fileRepo->findBy('drive_id', $id);
+
         return $file->download_url;
     }
 
@@ -36,12 +39,14 @@ class InfoService
             $driveUpdate = GoogleDriveFacade::update($id, ['name' => $name]);
             $file = $this->fileRepo->findBy('drive_id', $id);
             $update = $this->fileRepo->update([
-                'name' => $driveUpdate['name'],
+                'name'       => $driveUpdate['name'],
                 'updated_at' => $driveUpdate['modifiedTime']
             ], $file->id);
+
             return blank($update) ? false : true;
         } catch (\Throwable $th) {
             Log::error($th);
+
             return false;
         }
     }

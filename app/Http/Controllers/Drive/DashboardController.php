@@ -56,6 +56,7 @@ class DashboardController extends Controller
         if (blank($searchKey) || !isset($searchKey)) {
             return redirect('/drive/dashboard');
         }
+
         return view('pages.drive.dashboard', [
             'data' => $this->dashboardService->search($searchKey)
         ]);

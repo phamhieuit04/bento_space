@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Drive;
 
 use App\Http\Controllers\Controller;
 use App\Services\Google\Drive\StarService;
-use Illuminate\Http\Request;
 
 class StarController extends Controller
 {

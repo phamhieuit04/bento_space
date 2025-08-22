@@ -9,9 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function __construct(private AuthService $authService)
-    {
-    }
+    public function __construct(private AuthService $authService) {}
 
     public function auth()
     {
@@ -28,6 +26,7 @@ class AuthController extends Controller
         if ($this->authService->signin($request, $code)) {
             return redirect('/drive/dashboard');
         }
+
         return redirect('/');
     }
 

@@ -10,9 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthService
 {
-    public function __construct(private UserRepositoryInterface $userRepo)
-    {
-    }
+    public function __construct(private UserRepositoryInterface $userRepo) {}
 
     public function getOAuthUrl()
     {
@@ -25,15 +23,16 @@ class AuthService
             $response = GoogleAuthFacade::getToken($code);
             $googleUser = GoogleAuthFacade::getAccountInfo($response['access_token']);
             $user = $this->userRepo->updateOrCreate(['email' => $googleUser['email']], [
-                'name' => $googleUser['name'],
-                'email' => $googleUser['email'],
-                'access_token' => $response['access_token'],
+                'name'          => $googleUser['name'],
+                'email'         => $googleUser['email'],
+                'access_token'  => $response['access_token'],
                 'refresh_token' => $response['refresh_token'],
             ]);
             Auth::login($user);
             $request->session()->regenerate();
             $user->root_id = GoogleDriveFacade::getRootId();
             $user->touch();
+
             return true;
         } catch (\Throwable $th) {
             return false;
@@ -46,6 +45,7 @@ class AuthService
         $update = $this->userRepo->update([
             'access_token' => $response['access_token']
         ], Auth::id());
+
         return !blank($update) ? true : false;
     }
 
@@ -53,12 +53,13 @@ class AuthService
     {
         try {
             $this->userRepo->update([
-                'access_token' => null,
+                'access_token'  => null,
                 'refresh_token' => null
             ], Auth::id());
             Auth::logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
+
             return true;
         } catch (\Throwable $th) {
             return false;

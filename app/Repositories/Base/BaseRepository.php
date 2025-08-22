@@ -47,24 +47,28 @@ abstract class BaseRepository implements BaseRepositoryInterface
     {
         $model = self::find($id);
         $update = $model->update($attribute);
+
         return $update ? $this->model->find($id) : null;
     }
 
     public function delete($id)
     {
         $delete = self::find($id)->delete();
+
         return $delete ? true : false;
     }
 
     public function firstOrCreate(array $attributes, array $values)
     {
         $model = self::findWhere($attributes);
+
         return blank($model) ? self::create($values) : $model;
     }
 
     public function updateOrCreate(array $attributes, array $values)
     {
         $model = self::findWhere($attributes);
+
         return !blank($model) ?
             self::update($values, $model->id) :
             self::create($values);
@@ -73,6 +77,7 @@ abstract class BaseRepository implements BaseRepositoryInterface
     public function search(string $column, $value)
     {
         $collection = $this->model->where($column, 'like', "%$value%")->get();
+
         return $collection;
     }
 }

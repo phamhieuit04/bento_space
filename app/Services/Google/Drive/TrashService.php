@@ -13,24 +13,24 @@ class TrashService
     public function __construct(
         private FileRepositoryInterface $fileRepo,
         private DashboardService $dashboardService
-    ) {
-    }
+    ) {}
 
     public function all()
     {
         $data = collect([
-            TrashedDate::TODAY->value => collect([]),
-            TrashedDate::YESTERDAY->value => collect([]),
+            TrashedDate::TODAY->value         => collect([]),
+            TrashedDate::YESTERDAY->value     => collect([]),
             TrashedDate::LONG_TIME_AGO->value => collect([])
         ]);
         foreach ($this->fileRepo->filter('trashed', ['updated_at', 'desc']) as $item) {
             $key = match (true) {
-                $item->updated_at->isToday() => TrashedDate::TODAY->value,
+                $item->updated_at->isToday()     => TrashedDate::TODAY->value,
                 $item->updated_at->isYesterday() => TrashedDate::YESTERDAY->value,
-                default => TrashedDate::LONG_TIME_AGO->value,
+                default                          => TrashedDate::LONG_TIME_AGO->value,
             };
             $data[$key]->push($item);
         }
+
         return $data;
     }
 
@@ -41,14 +41,16 @@ class TrashService
             !$restore ? GoogleDriveFacade::delete($id) : GoogleDriveFacade::restore($id);
             $update = $this->fileRepo->update(
                 [
-                    'trashed' => !$restore ? TrashedStatus::TRASHED : TrashedStatus::NOT_TRASHED,
+                    'trashed'    => !$restore ? TrashedStatus::TRASHED : TrashedStatus::NOT_TRASHED,
                     'updated_at' => now()
                 ],
                 $file->id
             );
+
             return blank($update) ? false : true;
         } catch (\Throwable $th) {
             Log::error($th);
+
             return false;
         }
     }
@@ -65,9 +67,11 @@ class TrashService
                 return false;
             }
             $file = $this->fileRepo->findBy('drive_id', $id);
+
             return $this->fileRepo->delete($file['id']) ? true : false;
         } catch (\Throwable $th) {
             Log::error($th);
+
             return false;
         }
     }
@@ -81,9 +85,11 @@ class TrashService
             foreach ($this->fileRepo->filter('trashed', ['updated_at', 'desc']) as $item) {
                 $this->fileRepo->delete($item['id']);
             }
+
             return true;
         } catch (\Throwable $th) {
             Log::error($th);
+
             return false;
         }
     }

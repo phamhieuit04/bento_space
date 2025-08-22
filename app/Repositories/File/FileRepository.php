@@ -19,6 +19,7 @@ class FileRepository extends BaseRepository implements FileRepositoryInterface
     {
         $collection = $this->model->where($column, 'like', "%$value%")
             ->where('trashed', TrashedStatus::NOT_TRASHED->value)->get();
+
         return $collection;
     }
 
@@ -29,11 +30,12 @@ class FileRepository extends BaseRepository implements FileRepositoryInterface
             'starred' => $collection->where('starred', StarredStatus::STARRED->value)
                 ->where('trashed', TrashedStatus::NOT_TRASHED->value),
             'trashed' => $collection->where('trashed', TrashedStatus::TRASHED->value),
-            'all' => $collection->where('trashed', TrashedStatus::NOT_TRASHED->value),
+            'all'     => $collection->where('trashed', TrashedStatus::NOT_TRASHED->value),
         };
         !blank($orderBy) ?
             $result->orderBy($orderBy[0], $orderBy[1]) :
             $result->orderBy('created_at', 'desc');
+
         return $result->get();
     }
 }

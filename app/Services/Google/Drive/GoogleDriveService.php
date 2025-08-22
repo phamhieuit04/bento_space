@@ -10,8 +10,11 @@ use Illuminate\Support\Facades\Http;
 class GoogleDriveService
 {
     const SERVICE_ENDPOINT = 'https://www.googleapis.com/drive/v3';
+
     const UPLOAD_SERVICE_ENDPOINT = 'https://www.googleapis.com/upload/drive/v3';
+
     private $token;
+
     private $fields;
 
     public function __construct()
@@ -24,11 +27,12 @@ class GoogleDriveService
     {
         $response = Http::withToken($this->token)->get(
             self::SERVICE_ENDPOINT . '/files',
-            ['pageSize' => 1000, 'fields' => "files({$this->fields})",]
+            ['pageSize' => 1000, 'fields' => "files({$this->fields})"]
         );
         if ($response->failed()) {
             throw new GoogleException($response);
         }
+
         return $response->collect()['files'];
     }
 
@@ -41,6 +45,7 @@ class GoogleDriveService
         if ($response->failed()) {
             throw new GoogleException($response);
         }
+
         return $response->collect();
     }
 
@@ -52,6 +57,7 @@ class GoogleDriveService
         if ($response->failed()) {
             throw new GoogleException($response);
         }
+
         return $response->collect();
     }
 
@@ -64,13 +70,14 @@ class GoogleDriveService
         if ($response->failed()) {
             throw new GoogleException($response);
         }
+
         return $response->collect()['files'];
     }
 
     public function upload(UploadedFile $file)
     {
         $response = Http::withToken($this->token)->withHeaders([
-            'Content-Type' => $file->getClientMimeType(),
+            'Content-Type'   => $file->getClientMimeType(),
             'Content-Length' => $file->getSize()
         ])->withBody($file->getContent(), $file->getClientMimeType())
             ->withQueryParameters(['fields' => $this->fields])
@@ -78,6 +85,7 @@ class GoogleDriveService
         if ($response->failed()) {
             throw new GoogleException($response);
         }
+
         return $response->collect();
     }
 
@@ -88,6 +96,7 @@ class GoogleDriveService
         if ($response->failed()) {
             throw new GoogleException($response);
         }
+
         return $response->body();
     }
 
@@ -118,6 +127,7 @@ class GoogleDriveService
         if ($response->failed()) {
             throw new GoogleException($response);
         }
+
         return true;
     }
 
@@ -128,18 +138,20 @@ class GoogleDriveService
         if ($response->failed()) {
             throw new GoogleException($response);
         }
+
         return true;
     }
 
     public function createFolder(string $name)
     {
-        $response = Http::withToken($this->token)->post(self::SERVICE_ENDPOINT . "/files", [
-            'name' => $name,
+        $response = Http::withToken($this->token)->post(self::SERVICE_ENDPOINT . '/files', [
+            'name'     => $name,
             'mimeType' => 'application/vnd.google-apps.folder'
         ]);
         if ($response->failed()) {
             throw new \Exception($response);
         }
+
         return $response->collect();
     }
 
@@ -150,6 +162,7 @@ class GoogleDriveService
         if ($response->failed()) {
             throw new GoogleException($response);
         }
+
         return $response->json('id');
     }
 }
