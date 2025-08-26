@@ -42,7 +42,7 @@ class File extends Model
     protected function size(): Attribute
     {
         return Attribute::make(
-            fn(int $value) => Number::fileSize($value)
+            fn (int $value) => Number::fileSize($value)
         );
     }
 }
